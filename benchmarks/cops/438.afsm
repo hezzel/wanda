@@ -1,0 +1,3 @@
+sub :  ((term -> term) -> (term -> term))
+
+sub (/\x. sub (/\y. X2[y, x]) (Y[x])) X0 => sub (/\y. sub (/\x. X2[y, x]) X0) (sub (/\x. Y[x]) X0)

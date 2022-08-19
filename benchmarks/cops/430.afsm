@@ -1,0 +1,10 @@
+append :  (natlist -> (natlist -> natlist))
+nil :  natlist
+cons :  (nat -> (natlist -> natlist))
+map :  ((nat -> nat) -> (natlist -> natlist))
+
+append nil l => l
+append (cons h t) l => cons h (append t l)
+append (append k l) m => append k (append l m)
+map (/\x. F[x]) nil => nil
+map (/\x. F[x]) (cons h t) => cons (F[h]) (map (/\x. F[x]) t)

@@ -1,0 +1,21 @@
+(FUN
+  f : (o -> o) -> (o -> o -> o) -> o
+  g : o -> o
+  h : o -> o -> o
+  a : o
+  b : o
+)
+(VAR
+  x : o
+  y : o
+  Z : o -> o -> o
+)
+(RULES
+  f (\x. x) (\x y. Z x y) -> g (Z a (f (\x. Z x a) (\x y. Z x y))),
+  h x y -> x
+)
+(COMMENT
+doi:10.4230/LIPIcs.RTA.2010.17
+[86] Example 4.3
+submitted by: Julian Nagele
+)

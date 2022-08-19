@@ -1,0 +1,18 @@
+(FUN
+  f : (o -> o) -> o -> o
+  g : o -> o
+  h : o -> o
+)
+(VAR
+  z : o -> o
+  x : o
+  y : o
+)
+(RULES
+  f(\x. z(x), y) -> z(z(y)),
+  g(x) -> h(x)
+)
+(COMMENT
+[84] p. 589
+submitted by: Julian Nagele
+)

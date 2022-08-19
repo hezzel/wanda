@@ -1,0 +1,5 @@
+This directory contains some examples of files in Wanda's native AFSM format.
+These are hand-created, so not automatically generated, and are quite varied.
+Some take variables with arguments; some do not; some demonstrate the use of
+comments as well.
+

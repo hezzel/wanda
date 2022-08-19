@@ -1,0 +1,11 @@
+app :  ArGG -> (G -> G)
+lam :  (G -> G) -> ArGG
+union : G -> (G -> G)
+0 :  G
+
+app (lam (/\x. M[x])) N => M[N]
+lam (/\x. app L x) => L
+union x 0 => x
+union 0 y => y
+union (union x y) z => union x (union y z)
+union x y => union y x

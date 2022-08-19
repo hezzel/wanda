@@ -1,0 +1,22 @@
+min : (nat * nat) --> nat
+0 : nat
+s : (nat) --> nat
+nul : (nat -> nat * nat) --> nat
+if : (nat * nat * nat) --> nat
+find0 : (nat -> nat * nat * nat) --> nat
+
+X : nat
+Y : nat
+Z : nat
+F : nat -> nat
+
+min(s(X), s(Y)) => min(X, Y)
+min(X, 0) => 0
+min(0, X) => 0
+min(nul(F, Y), Z) => nul(F, min(Y, Z))
+nul(F, X) => find0(F, 0, X)
+find0(F, X, 0) => X
+find0(F, X, s(Y)) => if(F * X, find0(F, s(X), Y), X)
+if(s(Z), X, Y) => X
+if(0, X, Y) => Y
+

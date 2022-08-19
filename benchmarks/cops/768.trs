@@ -1,0 +1,28 @@
+(VAR
+  x : a
+  M : a -> b
+  N : a
+  L : Ar<a_b>
+  S : a
+  T : b
+  U : Pr<a_b>
+)
+(FUN
+  app : Ar<a_b> -> a -> b
+  lam : (a -> b) -> Ar<a_b>
+  pi1 : Pr<a_b> -> a
+  pi2 : Pr<a_b> -> b
+  pair : a -> b -> Pr<a_b>
+)
+(RULES
+  app(lam(\x.M x),N) -> M N,
+  lam(\x. app(L, x)) -> L,
+  pi1(pair(S,T)) -> S,
+  pi2(pair(S,T)) -> T,
+  pair(pi1(U),pi2(U)) -> U
+)
+(COMMENT
+doi:10.1305/ndjfl/1093883461
+[140] p. 265
+submitted by: Makoto Hamana
+)

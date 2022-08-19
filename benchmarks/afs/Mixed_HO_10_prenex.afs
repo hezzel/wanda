@@ -1,0 +1,20 @@
+and : (form * form) --> form
+or : (form * form) --> form
+not : (form) --> form
+forall : (form -> form) --> form
+exists : (form -> form) --> form
+
+P : form
+Q : form -> form
+
+and(P, forall(/\x:form.Q * x)) => forall(/\x:form.and(P, Q * x))
+or(P, forall(/\x:form.Q * x)) => forall(/\x:form.or(P, Q * x))
+and(forall(/\x:form.Q * x), P) => forall(/\x:form.and(Q * x, P))
+or(forall(/\x:form.Q * x), P) => forall(/\x:form.or(Q * x, P))
+not(forall(/\x:form.Q * x)) => exists(/\x:form.not(Q * x))
+and(P, exists(/\x:form.Q * x)) => exists(/\x:form.and(P, Q * x))
+or(P, exists(/\x:form.Q * x)) => exists(/\x:form.or(P, Q * x))
+and(exists(/\x:form.Q * x), P) => exists(/\x:form.and(Q * x, P))
+or(exists(/\x:form.Q * x), P) => exists(/\x:form.or(Q * x, P))
+not(exists(/\x:form.Q * x)) => forall(/\x:form.not(Q * x))
+

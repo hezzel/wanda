@@ -1,0 +1,28 @@
+(VAR
+  x : nat
+  y : nat
+  z : nat
+)
+(FUN
+  + : nat -> nat -> nat
+  0 : nat
+  s : nat -> nat
+  * : nat -> nat -> nat
+)
+(RULES
+  +(x,0)  -> x,
+  +(x,s(y))  -> s(+(x,y)),
+  +(0,y)  -> y,
+  +(s(x),y)  -> s(+(x,y)),
+  *(x,0) -> 0,
+  *(x,s(y)) -> +(*(x,y),x),
+  *(0,y) -> 0,
+  *(s(x),y) -> +(*(x,y),y),
+  +(+(x,y),z) -> +(x,+(y,z)),
+  +(x,y) -> +(y,x),
+  *(x,y) -> *(y,x)
+)
+(COMMENT 
+full experiments for [35], adaptation
+submitted by: Makoto Hamana
+)

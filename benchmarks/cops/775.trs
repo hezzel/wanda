@@ -1,0 +1,18 @@
+(FUN
+  let_val : expr -> (val -> expr) -> expr
+)
+(VAR
+  T : expr
+  U : expr
+  V : val -> val -> expr
+  x : val
+  y : val
+)
+(RULES
+  let_val(T,\x.let_val(U,\y.V x y)) -> let_val(U,\y.let_val(T,\x.V x y))
+)
+(COMMENT
+doi:10.1145/2429069.2429091
+[144] p. 179
+submitted by: Makoto Hamana
+)

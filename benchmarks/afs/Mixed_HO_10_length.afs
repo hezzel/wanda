@@ -1,0 +1,17 @@
+0 : nat
+nil : list
+cons : (nat * list) --> list
+foldr : (nat -> nat -> nat * nat * list) --> nat
+length : (list) --> nat
+s : (nat) --> nat
+
+x : nat
+y : nat
+F : nat -> nat -> nat
+xs : list
+ys : list
+
+foldr(F, x, nil) => x
+foldr(F, x, cons(y, ys)) => F * y * foldr(F, x, ys)
+length(xs) => foldr(/\x:nat./\n:nat.s(n), 0, xs)
+

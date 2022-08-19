@@ -1,0 +1,33 @@
+0 : A
+afterNth : A -> A -> A
+app : (A -> A) -> A -> A
+axxafterNth : A -> A -> A
+axxfst : A -> A
+axxhead : A -> A
+axxnatsFrom : A -> A
+axxsel : A -> A -> A
+axxsnd : A -> A
+axxsplitAt : A -> A -> A
+cons : A -> A -> A
+fst : A -> A
+head : A -> A
+map : (A -> A) -> A -> A
+mark : A -> A
+natsFrom : A -> A
+nil : A
+ap : (A -> A) -> A -> A
+
+map (/\x:A. ap X x) nil => nil
+map (/\x:A. ap X x) (cons Y Z) => cons (ap X Y) (map (/\x:A. ap X x) Z)
+app (/\x:A. ap X x) Y => ap X Y
+map (/\x:A. afterNth X x) nil => nil
+map (/\x:A. app X x) nil => nil
+map (/\x:A. axxafterNth X x) nil => nil
+map (/\x:A. axxfst x) nil => nil
+map (/\x:A. axxhead x) nil => nil
+map (/\x:A. axxnatsFrom x) nil => nil
+map (/\x:A. axxsel X x) nil => nil
+map (/\x:A. axxsnd x) nil => nil
+map (/\x:A. axxsplitAt X x) nil => nil
+ap X Y => X Y
+

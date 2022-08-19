@@ -1,0 +1,16 @@
+(FUN
+  f' : (o -> o) -> o
+  g : o -> o
+  app : (o -> o) -> (o -> o)
+)
+(VAR
+  y : o
+  z : o
+)
+(RULES
+  f' (\y. (g y)) -> f' (\y. (app (\z. (g z)) y))
+)
+(COMMENT 
+[85] p. 54
+submitted by: Julian Nagele
+)

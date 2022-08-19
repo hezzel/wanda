@@ -1,0 +1,11 @@
+a : nat
+g : (nat -> nat -> nat) -> nat
+f : nat -> nat -> bool
+h : nat -> bool
+
+f a (g (/\x:nat,y:nat.F[x,y])) => h F[a,g (/\x:nat,y:nat.F[x,y])]
+
+=== COMMENTS ===
+* origin: Kop thesis section 3.2.1
+* submitted to database: no
+

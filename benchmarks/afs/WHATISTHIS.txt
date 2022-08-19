@@ -1,0 +1,5 @@
+This directory contains some examples of files in the AFS format.
+This format is a translation of the XML format used in the international termination competition.
+All benchmarks have been automatically translated from benchmarks in the 2019 TPDB.
+(This was done using the converter tool included in Wanda's release.)
+

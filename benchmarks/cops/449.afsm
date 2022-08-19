@@ -1,0 +1,8 @@
+f :  (o -> o)
+hprime :  ((o -> o) -> o)
+h :  (o -> o)
+g :  (o -> o)
+a :  o
+
+f z => z
+hprime (/\x. h (f (g x))) => a

@@ -1,0 +1,18 @@
+0 : nat
+plus : (nat * nat) --> nat
+nil : list
+cons : (nat * list) --> list
+foldl : (nat -> nat -> nat * nat * list) --> nat
+sum : (list) --> nat
+plusc : nat -> nat -> nat
+
+x : nat
+y : nat
+F : nat -> nat -> nat
+l : list
+
+foldl(F, x, nil) => x
+foldl(F, x, cons(y, l)) => foldl(F, F * x * y, l)
+plusc => /\x:nat./\y:nat.plus(x, y)
+sum(l) => foldl(plusc, 0, l)
+

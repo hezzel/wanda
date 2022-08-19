@@ -1,0 +1,22 @@
+(FUN
+  g : o -> o
+  h : o -> o
+  i : o -> o
+  f : (o -> o) -> o
+  a : o
+)
+(VAR
+  F : o -> o
+  X : o
+  x : o
+)
+(RULES
+  f(\x. F(x)) -> F(a),
+  g(a) -> f(\x.i(x)),
+  i(X) -> h(g(X))
+)
+(COMMENT
+doi:10.1093/ietisy/e88-d.3.583
+[99] Example 2
+submitted by: Julian Nagele
+)

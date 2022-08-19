@@ -1,0 +1,8 @@
+f : (nat * nat -> nat) --> nat
+0 : nat
+1 : nat
+
+F : nat -> nat
+
+f(0, F) => F * f(F * 1, F)
+

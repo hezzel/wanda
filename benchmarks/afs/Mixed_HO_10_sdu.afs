@@ -1,0 +1,29 @@
+inl : (a) --> u
+inr : (b) --> u
+casea : (u * a -> a * b -> a) --> a
+caseb : (u * a -> b * b -> b) --> b
+caseu : (u * a -> u * b -> u) --> u
+
+X : a
+Y : b
+Z : u
+Fa : a -> a
+Ga : b -> a
+Ha : u -> a
+Fb : a -> b
+Gb : b -> b
+Hb : u -> b
+Fu : a -> u
+Gu : b -> u
+Hu : u -> u
+
+casea(inl(X), Fa, Ga) => Fa * X
+casea(inr(Y), Fa, Ga) => Ga * Y
+casea(Z, /\x:a.Ha * inl(x), /\y:b.Ha * inr(y)) => Ha * Z
+caseb(inl(X), Fb, Gb) => Fb * X
+caseb(inr(Y), Fb, Gb) => Gb * Y
+caseb(Z, /\x:a.Hb * inl(x), /\y:b.Hb * inr(y)) => Hb * Z
+caseu(inl(X), Fu, Gu) => Fu * X
+caseu(inr(Y), Fu, Gu) => Gu * Y
+caseu(Z, /\x:a.Hu * inl(x), /\y:b.Hu * inr(y)) => Hu * Z
+

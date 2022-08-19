@@ -1,0 +1,22 @@
+(FUN
+  abs : (value -> term) -> value
+  emb : value -> term
+  app : term -> term -> term
+)
+(VAR
+  x : value
+  M : value -> term
+  V : value
+  N : term
+  L : term
+)
+(RULES
+  app (emb (abs (\x. M x))) (emb V) -> M V,
+  app (app (emb (abs \x. M x)) N) L -> app (emb (abs \x.app (M x) L)) N,
+  app (emb V) (app (emb (abs \x. M x)) N) -> app (emb (abs \x. app (emb V) (M x))) N
+)
+(COMMENT
+doi:10.1007/978-3-642-54830-7_7
+[135] Definition 1
+submitted by: Vincent van Oostrom
+)

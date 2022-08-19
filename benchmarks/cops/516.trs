@@ -1,0 +1,22 @@
+(VAR
+  x : a
+  y : a
+  xs : alist
+  f : a -> a
+  g : a -> a
+)
+(FUN
+  nil : alist
+  cons : a -> alist -> alist
+  map : (a -> a) -> alist -> alist
+  o : (a -> a) -> (a -> a) -> (a -> a)
+)
+(RULES
+  map (\x. f x) nil -> nil,
+  map (\x. f x) (cons x xs) -> cons (f x) (map (\x. f x) xs),
+  map (\x. f x) (map (\x. g x) xs) -> map (o (\x. f x) (\x. g x)) xs,
+  o (\x. f x) (\x. g x) y -> f (g y)
+)
+(COMMENT
+[127] p. 206 with rule for function composition
+)

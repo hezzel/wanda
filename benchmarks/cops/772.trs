@@ -1,0 +1,16 @@
+(FUN
+  forall : (term -> form) -> form
+)
+(VAR
+  x : term
+  y : term
+  F : term -> term -> form
+)
+(RULES
+  forall(\x. forall(\y. F x y)) -> forall(\y. forall(\x. F x y))
+)
+(COMMENT
+doi:10.29007/7q54
+[141] Example 5
+submitted by: Kentaro Kikuchi
+)

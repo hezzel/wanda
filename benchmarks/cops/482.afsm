@@ -1,0 +1,5 @@
+compo :  ((o -> o) -> ((o -> o) -> (o -> o)))
+apply :  ((o -> o) -> (o -> o))
+
+compo (/\x. F[x]) (/\y. G[y]) Z => F[G[Z]]
+apply (/\x. F[x]) X => F[X]

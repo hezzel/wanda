@@ -1,0 +1,30 @@
+nil : list
+cons : (nat * list) --> list
+0 : nat
+s : (nat) --> nat
+max : (nat * nat) --> nat
+min : (nat * nat) --> nat
+insert : (nat * list * nat -> nat -> nat * nat -> nat -> nat) --> list
+sort : (list * nat -> nat -> nat * nat -> nat -> nat) --> list
+ascendingsort : (list) --> list
+descendingsort : (list) --> list
+
+X : nat -> nat -> nat
+Y : nat -> nat -> nat
+n : nat
+m : nat
+l : list
+
+max(0, n) => n
+max(n, 0) => n
+max(s(n), s(m)) => s(max(n, m))
+min(0, n) => 0
+min(n, 0) => 0
+min(s(n), s(m)) => s(min(n, m))
+insert(n, nil, X, Y) => cons(n, nil)
+insert(n, cons(m, l), X, Y) => cons(X * n * m, insert(Y * n * m, l, X, Y))
+sort(nil, X, Y) => nil
+sort(cons(n, l), X, Y) => insert(n, sort(l, X, Y), X, Y)
+ascendingsort(l) => sort(l, /\x:nat./\y:nat.min(x, y), /\x:nat./\y:nat.max(x, y))
+descendingsort(l) => sort(l, /\x:nat./\y:nat.max(x, y), /\x:nat./\y:nat.min(x, y))
+

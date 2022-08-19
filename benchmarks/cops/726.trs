@@ -1,0 +1,25 @@
+(FUN
+  0 : nat
+  s : nat -> nat
+  dom : nat -> nat -> nat -> nat
+  fun : (nat -> nat) -> nat -> nat -> nat
+  eval : nat -> nat -> nat
+)
+(VAR
+  X : nat
+  Y : nat
+  Z : nat
+  x : nat
+  F : nat -> nat
+)
+(RULES
+  dom (s X) (s Y) (s Z) -> s (dom X Y Z),
+  dom 0 (s Y) (s Z) -> s (dom 0 Y Z),
+  dom X Y 0 -> X,
+  dom 0 0 Z -> 0,
+  eval (fun (\x. F x) X Y) Z -> F (dom X Y Z)
+)
+(COMMENT 
+[85] p. 153
+submitted by: Julian Nagele
+)

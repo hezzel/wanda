@@ -1,0 +1,43 @@
+WANDA is a tool for proving or disproving higher-order termination.
+It was created by Cynthia Kop as part of the HOT (Higher-Order
+Termination) project from the VU University Amsterdam, which was
+supported by the Netherlands Organisation for Scientific Research
+(NWO-EW) under grant 612.000.629.
+
+Full documentation of the techniques used in WANDA 2.2 is given in the
+paper "WANDA -- a Higher Order Termination Tool" by Cynthia Kop, a
+pre-editing copy of which is included in this release.  The details
+of the techniques largely appear in the PhD thesis "Higher-Order
+Termination" by Cynthia Kop.  Citations to additional theory are
+provided by the tool when used.
+
+As back-ends, WANDA uses:
+* a sat-solver (resources/satsolver): this is the open-source tool
+  MiniSat, which is available from http://minisat.se
+  (MIT licence)
+* a first-order termination prover (resources/firstorderprover): this
+  is the open-source tool NaTT, which is available from
+  https://www.trs.css.i.nagoya-u.ac.jp/NaTT/
+* a small script to timeout external calls when they take too long:
+  this is the script timeout, which is available from
+  http://www.odi.ch/prog/timeout.php
+
+In addition, a non-termination prover may be used, which returns an
+explicit counterexample when returning NO; as no open-source tool is
+available which outputs the specific format that Wanda requires, no
+such back-end is included in the current release.
+
+Both the sat-solver and the termination prover can be replaced by
+other tools, provided these tools satisfy the formats of the
+corresponding competitions.  The timeout script, too, can be
+replaced by any tool with the same interface.  More information about
+those external tools can be found in resources/NOTICE.
+
+All licences are available in the licences/ directory.  WANDA itself
+is released under the Apache licence.
+
+If the executables do not work, then you should be able to compile
+WANDA from the source by typing "make" in the main directory.  To
+get the back-ends compiled, see the relevant information in
+resources/NOTICE.
+

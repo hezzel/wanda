@@ -1,0 +1,25 @@
+0 : nat
+s : (nat) --> nat
+err : nat
+pred : (nat) --> nat
+id : nat -> nat
+add : (nat) --> nat -> nat
+nul : nat -> bool
+eq : (nat) --> nat -> bool
+true : bool
+false : bool
+
+X : nat
+Y : nat
+
+nul * 0 => true
+nul * s(X) => false
+nul * err => false
+pred(0) => err
+pred(s(X)) => X
+id * X => X
+eq(0) => nul
+eq(s(X)) => /\z:nat.eq(X) * pred(z)
+add(0) => id
+add(s(X)) => /\z:nat.add(X) * s(z)
+

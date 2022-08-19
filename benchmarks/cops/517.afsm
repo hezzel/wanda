@@ -1,0 +1,9 @@
+foldr :  ((a -> (b -> b)) -> (b -> (b -> b)))
+nil :  b
+cons :  (a -> (b -> b))
+build :  (((a -> (b -> b)) -> (b -> b)) -> b)
+
+foldr (/\x, y. k[x, y]) z nil => z
+foldr (/\x, y. k[x, y]) z (cons x xs) => k[x, foldr (/\x, y. k[x, y]) z xs]
+build (/\k, z. g[k, z]) => g[cons, nil]
+foldr (/\x, y. k[x, y]) z (build (/\k, z. g[k, z])) => g[/\x./\y. k[x, y], z]

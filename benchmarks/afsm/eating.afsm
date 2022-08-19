@@ -1,0 +1,7 @@
+f : nat -> nat
+g : (nat -> nat) -> nat
+0 : nat
+
+f 0 => g (/\x.0)
+g (/\x.Z[x]) => Z[f 0]
+

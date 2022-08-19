@@ -1,0 +1,16 @@
+(FUN
+  a : o
+  b : o
+  f : o -> o
+)
+(VAR
+  x : o
+)
+(RULES
+  f(x) -> f(b),
+  f(a) -> f(b)
+)
+(COMMENT
+[84] Example 11.6.18(iv)
+submitted by: Julian Nagele
+)

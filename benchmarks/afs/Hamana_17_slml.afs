@@ -1,0 +1,21 @@
+abs : (a -> a) --> aa
+app : (aa * a) --> a
+let : (b * a -> b) --> b
+return : (a) --> b
+
+F : a -> a
+Y : a
+U : aa
+V : a
+I : a -> b
+P : b
+X1 : b
+Z1 : a -> b
+G1 : a -> b
+
+app(abs(F), Y) => F * Y
+abs(/\y:a.app(U, y)) => U
+let(return(V), I) => I * V
+let(P, /\z:a.return(z)) => P
+let(let(X1, Z1), G1) => let(X1, /\z:a.let(Z1 * z, G1))
+

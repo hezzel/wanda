@@ -1,0 +1,5 @@
+#!/bin/sh
+DIR=${0%/*}
+PATH=$DIR:$PATH
+sed 's/%/PeRCenT/g' "$1" | sed 's/~/TIlDe/g' | NaTT.exe 2> $DIR/stderr.txt
+cat $DIR/stderr.txt

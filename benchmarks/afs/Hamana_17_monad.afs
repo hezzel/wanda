@@ -1,0 +1,14 @@
+bind : (b * a -> b) --> b
+return : (a) --> b
+
+X : a
+Z : a -> b
+U : b
+V : b
+I : a -> b
+J : a -> b
+
+bind(return(X), Z) => Z * X
+bind(U, /\y:a.return(y)) => U
+bind(bind(V, I), J) => bind(V, /\y:a.bind(I * y, J))
+

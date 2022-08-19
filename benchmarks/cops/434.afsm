@@ -1,0 +1,10 @@
+foldl :  ((nat -> (nat -> nat)) -> (nat -> (natlist -> nat)))
+nil :  natlist
+cons :  (nat -> (natlist -> natlist))
+sum :  (natlist -> nat)
+plus :  (nat -> (nat -> nat))
+0 :  nat
+
+foldl (/\x, y. F[x, y]) n nil => n
+foldl (/\x, y. F[x, y]) n (cons h t) => foldl (/\x, y. F[x, y]) (F[n, h]) t
+sum l => foldl (/\x, y. plus x y) 0 l

@@ -1,0 +1,18 @@
+app :  ((nat -> nat) -> (nat -> nat))
+plus :  (nat -> (nat -> nat))
+0 :  nat
+s :  (nat -> nat)
+star :  (nat -> (nat -> nat))
+
+app (/\x. M[x]) N => M[N]
+plus x 0 => x
+plus x (s y) => s (plus x y)
+plus 0 y => y
+plus (s x) y => s (plus x y)
+star x 0 => 0
+star x (s y) => plus (star x y) x
+star 0 y => 0
+star (s x) y => plus (star x y) y
+plus (plus x y) z => plus x (plus y z)
+plus x y => plus y x
+star x y => star y x

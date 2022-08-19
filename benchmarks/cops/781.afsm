@@ -1,0 +1,7 @@
+choice :  (A -> (A -> A))
+new :  ((N -> A) -> A)
+
+choice P Y => choice Y P
+choice (choice P Y) Z => choice P (choice Y Z)
+new (/\x. P) => P
+new (/\x. new (/\y. P4[x, y])) => new (/\y. new (/\x. P4[x, y]))

@@ -1,0 +1,15 @@
+altmap :  ((int -> int) -> (list -> list))
+pls :  (int -> (int -> int))
+cons :  (int -> (list -> list))
+mlt :  (int -> (int -> int))
+nil :  list
+plus :  (int -> (int -> int))
+star :  (int -> (int -> int))
+2 :  int
+
+altmap (/\z. pls z Y) (cons X XS) => cons (pls X Y) (altmap (/\z. mlt z Y) XS)
+altmap (/\z. mlt z Y) (cons X XS) => cons (mlt X Y) (altmap (/\z. pls z Y) XS)
+altmap (/\z. F[z]) nil => nil
+pls X Y => plus X Y
+mlt X Y => star X Y
+pls 2 2 => mlt 2 2

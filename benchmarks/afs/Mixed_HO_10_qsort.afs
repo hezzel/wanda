@@ -1,0 +1,34 @@
+0 : nat
+s : (nat) --> nat
+le : (nat * nat) --> bool
+gr : (nat * nat) --> bool
+true : bool
+false : bool
+if : (bool * list * list) --> list
+nil : list
+cons : (nat * list) --> list
+app : (list * list) --> list
+filter : (nat -> bool * list) --> list
+qsort : (list) --> list
+
+x : nat
+y : nat
+xs : list
+ys : list
+p : nat -> bool
+
+if(true, xs, ys) => xs
+if(false, xs, ys) => ys
+app(nil, xs) => xs
+app(cons(x, xs), ys) => cons(x, app(xs, ys))
+le(0, y) => true
+le(s(x), 0) => false
+le(s(x), s(y)) => le(x, y)
+gr(0, y) => false
+gr(s(x), 0) => true
+gr(s(x), s(y)) => gr(x, y)
+filter(p, nil) => nil
+filter(p, cons(x, xs)) => if(p * x, cons(x, filter(p, xs)), filter(p, xs))
+qsort(nil) => nil
+qsort(cons(x, xs)) => app(qsort(filter(/\z:nat.le(z, x), xs)), app(cons(x, nil), qsort(filter(/\z:nat.gr(z, x), xs))))
+

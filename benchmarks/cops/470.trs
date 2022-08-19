@@ -1,0 +1,20 @@
+(FUN
+  P : o -> (o -> o) -> (o -> o) -> o
+  L : o -> o
+  R : o -> o
+)
+(VAR
+  Z : o
+  x : o
+  Z' : o -> o
+  Z'' : o -> o
+)
+(RULES
+  P (L Z) (\x. Z'(x)) (\x. Z''(x)) -> Z'(Z),
+  P (R Z) (\x. Z'(x)) (\x. Z''(x)) -> Z''(Z)
+)
+(COMMENT
+doi:10.1016/0304-3975(93)90091-7
+[96] p. 285
+submitted by: Julian Nagele
+)

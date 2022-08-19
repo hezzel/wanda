@@ -1,0 +1,27 @@
+(VAR
+  x : string
+  y : string
+)
+(FUN
+  nil : string
+  1 : string -> string
+  0 : string -> string
+  true : bool
+  false : bool
+  decide : string -> bool
+  cmp : string -> string -> bool
+  0s : string -> string
+  1s : string -> string
+)
+(RULES
+  decide x -> cmp (0s x) (1s x),
+  0s nil -> nil,
+  0s (0 x) -> 0 (0s x),
+  0s (1 x) -> 0s x,
+  1s nil -> nil,
+  1s (1 x) -> 1 (1s x),
+  1s (0 x) -> 1s x,
+  cmp (0 x) (1 y) -> cmp x y,
+  cmp (0 x) nil -> false,
+  cmp nil y -> true
+)

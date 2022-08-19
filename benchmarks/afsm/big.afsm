@@ -1,0 +1,17 @@
+0 : nat
+s : nat -> nat
+add : nat -> nat -> nat
+nil : list
+cons : nat -> list -> list
+sum : list -> nat
+explode : nat -> (nat -> nat) -> list
+A : nat -> nat
+
+add 0 x => x
+add (s y) x => s (add y x)
+sum (cons h t) => add h (sum t)
+explode 0 F => nil
+explode (s n) F => cons (F n) (explode n F)
+A 0 => 0
+A (s n) => s (sum (explode n (/\x.A x)))
+

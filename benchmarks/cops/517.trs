@@ -1,0 +1,23 @@
+(VAR
+  k : a -> b -> b
+  z : b
+  x : a
+  y : b
+  xs : b
+  g : (a -> b -> b) -> b -> b
+)
+(FUN
+  nil : b
+  cons : a -> b -> b
+  foldr : (a -> b -> b) -> b -> b -> b
+  build : ((a -> b -> b) -> b -> b) -> b
+)
+(RULES
+  foldr (\x y. k x y) z nil -> z,
+  foldr (\x y. k x y) z (cons x xs) -> k x (foldr (\x y. k x y) z xs),
+  build (\k z. g (\x y. k x y) z) -> g cons nil,
+  foldr (\x y. k x y) z (build (\k z. g (\x y. k x y) z)) -> g (\x y. k x y) z
+)
+(COMMENT
+[127] p. 209 without rank 2 polymorphism
+)

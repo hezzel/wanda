@@ -1,0 +1,7 @@
+nil : list
+cons : nat -> list -> list
+map : (nat -> nat) -> list -> list
+
+map (/\x:nat.Z[x]) nil => nil
+map (/\x.Z[x]) (cons H T) => cons Z[H] (map Z T)
+

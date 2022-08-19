@@ -1,0 +1,7 @@
+f : (nat * nat) --> nat
+g : (nat -> nat) --> nat
+
+X : nat -> nat
+
+f(g(X), g(X)) => X * g(X)
+

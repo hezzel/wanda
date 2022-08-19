@@ -1,0 +1,13 @@
+A : (term * term) --> term
+L : (term -> term) --> term
+V : (term) --> term
+noabs : (term) --> term
+
+X : term
+Y : term
+Z : term -> term
+
+noabs(A(X, Y)) => A(noabs(X), noabs(Y))
+noabs(V(X)) => V(X)
+A(L(Z), Y) => Z * noabs(Y)
+

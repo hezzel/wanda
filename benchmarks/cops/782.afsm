@@ -1,0 +1,4 @@
+nu :  ((I -> I) -> I)
+
+nu (/\a. X1) => X1
+nu (/\a. nu (/\b. X4[a, b])) => nu (/\a. nu (/\b. X4[b, a]))

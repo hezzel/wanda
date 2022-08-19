@@ -1,0 +1,34 @@
+0 : nat
+s : (nat) --> nat
+le : (nat * nat) --> bool
+gcd : (nat * nat) --> nat
+minus : (nat * nat) --> nat
+true : bool
+false : bool
+if : (bool * nat * nat) --> nat
+nil : list
+cons : (nat * list) --> list
+zipWith : (nat -> nat -> nat * list * list) --> list
+gcdlists : (list * list) --> list
+
+x : nat
+y : nat
+xs : list
+ys : list
+f : nat -> nat -> nat
+
+le(0, y) => true
+le(s(x), 0) => false
+le(s(x), s(y)) => le(x, y)
+minus(x, 0) => x
+minus(s(x), s(y)) => minus(x, y)
+gcd(0, y) => 0
+gcd(s(x), 0) => 0
+gcd(s(x), s(y)) => if(le(y, x), s(x), s(y))
+if(true, s(x), s(y)) => gcd(minus(x, y), s(y))
+if(false, s(x), s(y)) => gcd(minus(y, x), s(x))
+zipWith(f, xs, nil) => nil
+zipWith(f, nil, ys) => nil
+zipWith(f, cons(x, xs), cons(y, ys)) => cons(f * x * y, zipWith(f, xs, ys))
+gcdlists(xs, ys) => zipWith(/\x:nat./\y:nat.gcd(x, y), xs, ys)
+

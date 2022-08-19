@@ -1,0 +1,12 @@
+xplus :  (nat -> (nat -> nat))
+0 :  nat
+s :  (nat -> nat)
+rec :  (nat -> (nat -> ((nat -> (nat -> nat)) -> nat)))
+v :  (var -> nat)
+xtimes :  (nat -> (nat -> nat))
+
+xplus x 0 => x
+xplus x (s y) => s (xplus x y)
+rec 0 U (/\z1, z2. F[z1, z2]) => U
+rec (s (v n)) U (/\z1, z2. F[z1, z2]) => F[v n, rec (v n) U (/\z1, z2. F[z1, z2])]
+xtimes x y => rec y 0 (/\z1, z2. xplus x z2)

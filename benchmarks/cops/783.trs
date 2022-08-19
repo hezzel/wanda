@@ -1,0 +1,16 @@
+(FUN
+  r : (i -> o) -> o
+)
+(VAR
+  X : i -> i -> o
+  a : i
+  b : i
+)
+(RULES
+  r(\a. r(\b.X a b)) -> r(\a. r (\b.X b a)),
+)
+(COMMENT
+doi:10.1109/LICS.2013.58
+[147] Section V.A. (r/r)
+submitted by: Makoto Hamana
+)

@@ -1,0 +1,17 @@
+0 : nat
+s : (nat) --> nat
+plus : (nat * nat) --> nat
+times : (nat * nat) --> nat
+rec : (nat * nat * nat -> nat -> nat) --> nat
+
+x : nat
+y : nat
+U : nat
+F : nat -> nat -> nat
+
+plus(x, 0) => x
+plus(x, s(y)) => s(plus(x, y))
+rec(0, U, F) => U
+rec(s(x), U, F) => F * x * rec(x, U, F)
+times(x, y) => rec(y, 0, /\z1:nat./\z2:nat.plus(x, z2))
+

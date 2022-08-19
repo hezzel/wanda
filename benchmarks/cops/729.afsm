@@ -1,0 +1,19 @@
+tapp :  (term -> (term -> term))
+mu :  ((stream -> term) -> term)
+cons :  (term -> (stream -> stream))
+sapp :  (term -> (stream -> term))
+abs :  ((term -> term) -> term)
+car :  (stream -> term)
+cdr :  (stream -> stream)
+
+tapp (mu (/\a. s[a])) u => mu (/\a. s[cons u a])
+sapp (mu (/\a. s[a])) S => s[S]
+abs (/\x. t[x]) => mu (/\a. sapp (t[car a]) (cdr a))
+sapp u (cons uprime S) => sapp (tapp u uprime) S
+car (cons u S) => u
+cdr (cons u S) => S
+mu (/\a. sapp u a) => u
+cons (car S) (cdr S) => S
+sapp (tapp u (car S)) (cdr S) => sapp u S
+tapp (abs (/\x. t[x])) u => t[u]
+abs (/\x. tapp u x) => u

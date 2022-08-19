@@ -1,0 +1,6 @@
+f :  (o -> (o -> o))
+a :  o
+b :  o
+
+f a y => y
+f yprime b => yprime

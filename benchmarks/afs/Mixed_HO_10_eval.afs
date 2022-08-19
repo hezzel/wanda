@@ -1,0 +1,17 @@
+o : N
+s : (N) --> N
+fun : (N -> N * N * N) --> N
+dom : (N * N * N) --> N
+eval : (N * N) --> N
+
+F : N -> N
+X : N
+Y : N
+Z : N
+
+eval(fun(F, X, Y), Z) => F * dom(X, Y, Z)
+dom(s(X), s(Y), s(Z)) => s(dom(X, Y, Z))
+dom(o, s(Y), s(Z)) => s(dom(o, Y, Z))
+dom(X, Y, o) => X
+dom(o, o, Z) => o
+

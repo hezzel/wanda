@@ -1,0 +1,8 @@
+fapp : (o * o) --> o
+lam : (o -> o) --> o
+
+X : o -> o
+Y : o
+
+fapp(lam(X), Y) => X * Y
+

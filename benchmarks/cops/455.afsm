@@ -1,0 +1,7 @@
+pi1 :  (term -> term)
+pi :  (term -> (term -> term))
+pi2 :  (term -> term)
+
+pi1 (pi z1 z2) => z1
+pi2 (pi z1 z2) => z2
+pi (pi1 z) (pi2 z) => z

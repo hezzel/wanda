@@ -1,0 +1,15 @@
+app :  (ArGG -> (G -> G))
+lam :  ((G -> G) -> ArGG)
+pi1 :  (PrGG -> G)
+pair :  (G -> (G -> PrGG))
+pi2 :  (PrGG -> G)
+fix :  ((G -> G) -> G)
+fix2 :  ((G -> (G -> PrGG)) -> PrGG)
+
+app (lam (/\x. M[x])) N => M[N]
+pi1 (pair x y) => x
+pi2 (pair x y) => y
+pair (pi1 t) (pi2 t) => t
+fix (/\x. u) => u
+fix2 (/\x1, x2. t) => t
+fix2 (/\x1, x2. pair (t1[x1, x2]) (t2[x1, x2])) => pair (fix (/\y. t1[y, y])) (fix (/\y. t2[y, y]))

@@ -1,0 +1,21 @@
+0 : nat
+s : nat -> nat
+dec : nat -> nat -> nat
+grec : nat -> nat -> nat -> (nat -> nat -> nat) -> nat
+plus : nat -> nat -> nat
+log2 : nat -> nat -> nat
+sumlog : nat -> nat
+
+dec 0 X => 0
+dec X 0 => X
+dec (s X) (s Y) => dec X Y
+grec 0 D U F => U
+grec (s X) (s Y) U F => grec (dec X Y) (s Y) (F U X) F
+plus 0 X => X
+plus (s X) Y => s (plus X Y)
+log2 (s 0) 0 => 0
+log2 0 (s Y) => s (log2 (s Y) 0)
+log2 (s 0) (s Y) => s (log2 (s Y) 0)
+log2 (s (s X)) Y => log2 X (s Y)
+sumlog X => grec X (s (s 0)) 0 (/\x,y.plus (log2 (s x) 0) y)
+

@@ -1,0 +1,27 @@
+(VAR
+  x : G
+  y : G
+  z : G
+  M : G -> G
+  N : G
+  L : Ar<G_G>
+)
+(FUN
+  0 : G
+  union : G -> G -> G
+  lam : (G -> G) -> Ar<G_G>
+  app : Ar<G_G> -> G -> G
+)
+(RULES
+  app(lam(\x.M x),N) -> M N,
+  lam(\x. app(L, x)) -> L,
+  union(x,0)  -> x,
+  union(0,y)  -> y,
+  union(union(x,y),z) -> union(x,union(y,z)),
+  union(x,y)  -> union(y,x)
+)
+(COMMENT
+doi:10.1017/S096012951600027X
+[143] subsystem of Figure 11; part of Cops #776
+submitted by: Makoto Hamana
+)

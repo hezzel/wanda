@@ -1,0 +1,14 @@
+0 : nat
+g : nat -> nat -> nat
+f : nat -> nat -> nat
+h : (nat -> nat -> nat) -> nat
+
+g 0 0 => h (/\x:nat.f x)
+f Z => /\y:nat.g Z y
+h (/\x:nat,y:nat.F[x,y]) => F[0,0]
+
+=== COMMENTS === 
+
+* origin: thesis, section 6.5.2
+* submitted: no
+

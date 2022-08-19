@@ -1,0 +1,7 @@
+app :  (term -> (term -> term))
+abs :  ((term -> term) -> term)
+
+app (abs (/\x. T[x])) S => T[S]
+abs (/\x. app (abs (/\y. M[y, x])) S) => app (abs (/\y. abs (/\x. M[y, x]))) S
+app (app (abs (/\x. T[x])) S) U => app (abs (/\x. app (T[x]) U)) S
+app (abs (/\y. app (abs (/\x. M[x, y])) S)) U => app (abs (/\x. app (abs (/\y. M[x, y])) U)) S

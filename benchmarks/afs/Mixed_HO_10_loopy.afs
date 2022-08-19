@@ -1,0 +1,11 @@
+f : (N -> N * N) --> N
+h : (N) --> N
+g : N -> N
+
+X : N
+F : N -> N
+
+f(g, X) => h(X)
+f(F, X) => F * X
+h(X) => f(/\z:N.z, X)
+

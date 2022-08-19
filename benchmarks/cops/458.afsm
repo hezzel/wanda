@@ -1,0 +1,8 @@
+app :  (o -> (o -> o))
+abs :  ((o -> o) -> o)
+bot :  o
+
+app (abs (/\x. z[x])) y => z[y]
+abs (/\x. app y x) => y
+app bot x => bot
+abs (/\x. bot) => bot

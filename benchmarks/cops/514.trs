@@ -1,0 +1,36 @@
+(FUN 
+  - : R -> R
+  + : R -> R -> R
+  * : R -> R -> R
+  d : (R -> R) -> R -> R
+  sin : R -> R
+  cos : R -> R
+  0 : R
+  1 : R
+)
+(VAR
+  x : R
+  C : R
+  z : R
+  F : R -> R
+  G : R -> R
+)
+(RULES
+  d (\x. C) z -> 0,
+  d (\x. x) z -> 1,
+  d (\x. - (F x)) z -> - (d (\x. F x) z),
+  d (\x. + (F x) (G x)) z ->
+    + (d (\x. (F x)) z) (d (\x. (G x)) z),
+  d (\x. * (F x) (G x)) z ->
+    + (* (d (\x. (F x)) z) (G z))
+      (* (F z) (d (\x. (G x)) z)),
+  d (\x. sin (F x)) z -> * (cos z) (d (\x. (F x)) z),
+  d (\x. cos (F x)) z -> * (- (sin z)) (d (\x. (F x)) z),
+  - 0 -> 0,
+  * 0 x -> 0,
+  * x 0 -> 0,
+  + 0 x -> x
+)
+(COMMENT
+adapted from http://www.cs.vu.nl/~femke/ps/examples.ps
+)

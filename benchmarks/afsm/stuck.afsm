@@ -1,0 +1,6 @@
+stuck : bool -> bool -> (bool -> bool) -> bool
+true : bool
+false : bool
+
+stuck true false F => stuck (F true) (F true) F
+

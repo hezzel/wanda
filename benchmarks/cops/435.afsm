@@ -1,0 +1,6 @@
+h :  (nat -> nat)
+0 :  nat
+g :  (((nat -> nat) -> (nat -> nat)) -> nat)
+
+h 0 => g (/\x, y. x (h y))
+g (/\x, y. Z[x, y]) => Z[/\z. 0, 0]

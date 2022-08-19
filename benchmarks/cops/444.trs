@@ -1,0 +1,14 @@
+(FUN
+  mu : (o -> o) -> o
+)
+(VAR
+  x : o
+  z : o -> o
+)
+(RULES
+  mu (\x. z x) -> z (mu (\x. z x))
+)
+(COMMENT
+[84] p. 602
+submitted by: Julian Nagele
+)

@@ -1,0 +1,56 @@
+(FUN
+ 0 : a
+ 1 : a
+ 2 : a
+ cons : d -> e -> e
+ f : a -> a -> a -> a
+ false : c
+ filter : (d -> c) -> e -> e
+ filter2 : c -> (d -> c) -> d -> e -> e
+ g : b -> b -> b -> b
+ map : (d -> d) -> e -> e
+ nil : e
+ true : c
+)
+(VAR
+ X : a
+ Y : a
+ U : a
+ V : a
+ W : b
+ P : b
+ X1 : b
+ Y1 : b
+ G1 : d -> d
+ H1 : d -> d
+ W1 : d
+ P1 : e
+ F2 : d -> c
+ Z2 : d -> c
+ U2 : d
+ V2 : e
+ I2 : d -> c
+ P2 : d
+ X3 : e
+ Z3 : d -> c
+ U3 : d
+ V3 : e
+ x : d
+)
+(RULES
+  f 0 1 X -> f X X X,
+  f Y U V -> 2,
+  0 -> 2,
+  1 -> 2,
+  g W W P -> P,
+  g X1 Y1 Y1 -> X1,
+  map (\x. G1 x) nil -> nil,
+  map (\x. H1 x) (cons W1 P1) -> cons (H1 W1) (map (\x. H1 x) P1),
+  filter (\x. F2 x) nil -> nil,
+  filter (\x. Z2 x) (cons U2 V2) -> filter2 (Z2 U2) (\x. Z2 x) U2 V2,
+  filter2 true (\x. I2 x) P2 X3 -> cons P2 (filter (\x. I2 x) X3),
+  filter2 false (\x. Z3 x) U3 V3 -> filter (\x. Z3 x) V3
+)
+(COMMENT
+submitted by: Julian Nagele
+)

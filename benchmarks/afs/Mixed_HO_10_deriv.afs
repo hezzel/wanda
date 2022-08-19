@@ -1,0 +1,23 @@
+0 : real
+1 : real
+minus : (real) --> real
+sin : (real) --> real
+cos : (real) --> real
+ln : (real) --> real
+plus : (real * real) --> real
+times : (real * real) --> real
+div : (real * real) --> real
+der : (real -> real) --> real -> real
+
+y : real
+F : real -> real
+G : real -> real
+
+der(/\x:real.y) => /\x:real.0
+der(/\x:real.x) => /\x:real.1
+der(/\x:real.sin(x)) => /\x:real.cos(x)
+der(/\x:real.cos(x)) => /\x:real.minus(sin(x))
+der(/\x:real.plus(F * x, G * x)) => /\x:real.plus(der(F) * x, der(G) * x)
+der(/\x:real.times(F * x, G * x)) => /\x:real.plus(times(der(F) * x, G * x), times(F * x, der(G) * x))
+der(/\x:real.ln(F * x)) => /\x:real.div(der(F) * x, F * x)
+

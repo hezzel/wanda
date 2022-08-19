@@ -1,0 +1,19 @@
+(FUN
+  apply : (o -> o) -> o -> o
+  a : o
+  b : o
+)
+(VAR
+  F : o -> o
+  X : o
+  x : o
+)
+(RULES
+  apply(\x.F(x),X) -> F(X),
+  a -> b
+)
+(COMMENT
+doi:10.1093/ietisy/e88-d.3.583
+[99] Example 6
+submitted by: Julian Nagele
+)

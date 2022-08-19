@@ -1,0 +1,20 @@
+(VAR
+  x : o
+  Z : o -> o
+)
+(FUN
+  f : o -> o -> o
+  s : o -> o
+  a : o
+  b : o
+  mu : (o -> o) -> o
+)
+(RULES
+  f x x -> a,
+  s x -> f x (s x),
+  mu (\x. Z x) -> Z (mu (\x. Z x))
+)
+(COMMENT
+variation of example from Klop [14]
+submitted by: Julian Nagele
+)

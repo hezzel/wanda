@@ -1,0 +1,12 @@
+0 : nat 
+f : (nat -> nat -> nat) -> nat 
+g : (nat -> nat -> nat) -> nat 
+
+f (/\x:nat,y:nat.Z[x,y]) => Z[g (/\x:nat,y:nat.Z[x,y]), 0]
+g (/\x:nat,y:nat.Z[x,y]) => Z[0, f (/\x:nat,y:nat.Z[x,y])]
+
+=== COMMENTS === 
+
+* origin: Kop thesis section 3.2.2
+* submitted to database: no
+

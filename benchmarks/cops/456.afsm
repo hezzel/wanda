@@ -1,0 +1,20 @@
+app :  (term -> (term -> term))
+succ :  term
+s :  (term -> term)
+pred :  term
+iszero :  term
+0 :  term
+tt :  term
+ff :  term
+if :  term
+abs :  ((term -> term) -> term)
+Y :  term
+
+app succ m => s m
+app pred (s m) => m
+app iszero 0 => tt
+app iszero (s m) => ff
+app (app (app if tt) x) y => x
+app (app (app if ff) x) y => y
+app (abs (/\x. z[x])) y => z[y]
+app Y x => app x (app Y x)

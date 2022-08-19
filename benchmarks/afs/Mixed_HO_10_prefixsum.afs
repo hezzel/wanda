@@ -1,0 +1,15 @@
+nil : list
+cons : (nat * list) --> list
+plus : (nat * nat) --> nat
+map : (nat -> nat * list) --> list
+ps : (list) --> list
+
+x : nat
+xs : list
+F : nat -> nat
+
+map(F, nil) => nil
+map(F, cons(x, xs)) => cons(F * x, map(F, xs))
+ps(nil) => nil
+ps(cons(x, xs)) => cons(x, ps(map(/\y:nat.plus(x, y), xs)))
+

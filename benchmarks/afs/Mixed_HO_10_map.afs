@@ -1,0 +1,11 @@
+nil : list
+cons : (a * list) --> list
+map : (list * a -> a) --> list
+
+x : a
+l : list
+F : a -> a
+
+map(nil, F) => nil
+map(cons(x, l), F) => cons(F * x, map(l, F))
+

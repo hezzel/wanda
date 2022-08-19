@@ -1,0 +1,7 @@
+f : (nat * nat) --> nat
+g : (nat -> nat) --> nat
+
+X : nat -> nat
+
+f(g(/\x:nat.f(x, x)), g(/\x:nat.f(x, x))) => (/\x:nat.f(x, x)) * g(/\x:nat.f(x, x))
+

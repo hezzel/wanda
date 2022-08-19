@@ -1,0 +1,33 @@
+(VAR
+  k : a -> a -> a
+  z : a
+  x : a
+  y : a
+  xs : a
+  g : (a -> a -> a) -> a -> a
+)
+(FUN
+  nil : a
+  cons : a -> a -> a
+  foldr : (a -> a -> a) -> a -> a -> a
+  build : ((a -> a -> a) -> a -> a) -> a
+  add : a -> a -> a
+  0 : a
+  s : a -> a
+  sum : a -> a
+  down : a -> a
+  down' : a -> (a -> a -> a) -> a -> a
+)
+(RULES
+  foldr (\x y. k x y) z nil -> z,
+  foldr (\x y. k x y) z (cons x xs) -> k x (foldr (\x y. k x y) z xs),
+  build (\k z. g (\x y. k x y) z) -> g cons nil,
+  foldr (\x y. k x y) z (build (\k z. g (\x y. k x y) z)) -> g (\x y. k x y) z,
+  sum xs -> foldr add 0 xs,
+  down x -> build (\k z. down' x (\x y. k x y) z),
+  down' 0 (\x y. k x y) z -> z,
+  down' (s x) (\x y. k x y) z -> k x (down' x (\x y. k x y) z)
+)
+(COMMENT
+[127] p. 209 ignoring types
+)

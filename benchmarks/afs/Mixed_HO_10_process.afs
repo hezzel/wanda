@@ -1,0 +1,22 @@
+plus : (proc * proc) --> proc
+times : (proc * proc) --> proc
+delta : proc
+sigma : (data -> proc) --> proc
+
+X : proc
+Y : proc
+Z : proc
+D : data
+P : data -> proc
+Q : data -> proc
+
+plus(X, X) => X
+times(plus(X, Y), Z) => plus(times(X, Z), times(Y, Z))
+times(times(X, Y), Z) => times(X, times(Y, Z))
+plus(X, delta) => X
+times(delta, X) => delta
+sigma(/\d:data.X) => X
+plus(sigma(/\d:data.P * d), P * D) => sigma(/\d:data.P * d)
+sigma(/\d:data.plus(P * d, Q * d)) => plus(sigma(/\d:data.P * d), sigma(/\d:data.Q * d))
+times(sigma(/\d:data.P * d), X) => sigma(/\d:data.times(P * d, X))
+

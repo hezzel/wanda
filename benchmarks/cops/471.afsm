@@ -1,0 +1,7 @@
+g :  ((o -> (o -> o)) -> o)
+F :  (o -> (o -> (o -> o)))
+C :  o
+
+g (/\x, y. F x y (Z[x, y])) => C
+g (/\x, y. F (Z[x, y]) x y) => C
+g (/\x, y. F y (Z[x, y]) x) => C

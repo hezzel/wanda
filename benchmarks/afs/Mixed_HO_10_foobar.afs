@@ -1,0 +1,7 @@
+foo : (o) --> o
+bar : (o -> o) --> o
+
+F : o -> o
+
+foo(bar(F)) => F * bar(F)
+

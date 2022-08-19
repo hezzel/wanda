@@ -1,0 +1,18 @@
+(FUN
+  f : (o -> o) -> (o -> o) -> o
+  a : o
+)
+(VAR
+  x : o
+  y : o
+  Z : o -> o
+)
+(RULES
+  f (\x. Z x) (\y. y) -> f (\x. Z x) (\y. Z (Z y)),
+  f (\x. x) (\y. Z y) -> a
+)
+(COMMENT
+doi:10.4230/LIPIcs.RTA.2010.17
+[86] Example 4.4
+submitted by: Julian Nagele
+)

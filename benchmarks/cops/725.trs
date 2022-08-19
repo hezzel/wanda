@@ -1,0 +1,34 @@
+(FUN
+  0 : nat
+  s : nat -> nat
+  nil : natlist
+  cons : nat -> natlist -> natlist
+  map : (nat -> nat) -> natlist -> natlist
+  op : (nat -> nat) -> (nat -> nat) -> nat -> nat
+  pow : (nat -> nat) -> nat -> nat -> nat
+  at : (nat -> nat) -> nat -> nat
+  L : (nat -> nat) -> nat -> nat
+)
+(VAR
+  x : nat
+  y : nat
+  z : nat
+  F : nat -> nat
+  G : nat -> nat
+  h : nat
+  t : natlist
+)
+(RULES
+  map (\x.F x) nil -> nil,
+  map (\x.F x) (cons h t) -> cons (at F h) (map (\x.F x) t),
+  pow (\x.F x) 0 y -> L (\x. x) y,
+  pow (\x.F x) (s z) y -> op (\x.F x) (pow (\x.F x) (s z)) y,
+  op (\x.F x) (\x.G x) y -> at (\x.F x) (at (\x.G x) y),
+  L (\z. at (\x.F x) z) y -> F y,
+  L (\z. op (\x.F x) (\x.G x) z) y -> op (\x.F x) (\x.G x) y,
+  at (\x.F x) z -> F z
+)
+(COMMENT 
+[85] p. 63
+submitted by: Julian Nagele
+)

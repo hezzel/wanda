@@ -1,0 +1,13 @@
+0 : N
+rec : (N -> (N -> B) -> N -> B) -> B -> N -> B
+s : N -> N
+
+F : N -> (N -> B) -> N -> B
+Z : N -> B
+G : N -> (N -> B) -> N -> B
+H : N -> B
+W : N
+
+rec * F * (Z * 0) => Z
+rec * G * (H * (s * W)) => G * W * (rec * G * (H * W))
+

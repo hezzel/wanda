@@ -1,0 +1,11 @@
+neg :  (form -> form)
+and :  (form -> (form -> form))
+or :  (form -> (form -> form))
+forall :  ((term -> form) -> form)
+exists :  ((term -> form) -> form)
+
+neg (neg z) => z
+neg (and z zprime) => or (neg z) (neg zprime)
+neg (or z zprime) => and (neg z) (neg zprime)
+neg (forall (/\x. y[x])) => exists (/\x. neg (y[x]))
+neg (exists (/\x. y[x])) => forall (/\x. neg (y[x]))

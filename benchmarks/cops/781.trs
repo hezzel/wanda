@@ -1,0 +1,23 @@
+(FUN
+  choice : A -> A -> A
+  new : (N -> A) -> A
+)
+(VAR
+  P : A
+  Y : A
+  Z : A
+  P4 : N -> N -> A
+  x : N
+  y : N
+)
+(RULES
+  choice(P,Y) -> choice(Y,P),
+  choice(choice(P,Y),Z) -> choice(P,choice(Y,Z)),
+  new (\x.P) -> P,
+  new (\x.new (\y.P4 x y)) -> new (\y.new (\x.P4 x y)),
+)
+(COMMENT
+doi:10.1016/j.tcs.2007.09.024
+[146] Section 3 (subsystem)
+submitted by: Makoto Hamana
+)

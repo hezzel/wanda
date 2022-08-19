@@ -1,0 +1,3 @@
+This directory contains the PRS benchmarks in the COPS database, and an automatically generated translation to AFSM.
+Wanda cannot read the .hrs format, but can handle the generated files.
+

@@ -1,0 +1,6 @@
+g :  (((o -> o) -> o) -> o)
+f :  ((o -> o) -> o)
+dots :  o
+
+g (/\y. X[y]) => X[/\z. X[/\x. z]]
+f (/\x. Y[x]) => dots

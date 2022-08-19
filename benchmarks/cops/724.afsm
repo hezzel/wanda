@@ -1,0 +1,5 @@
+fprime :  ((o -> o) -> o)
+g :  (o -> o)
+app :  ((o -> o) -> (o -> o))
+
+fprime (/\y. g y) => fprime (/\y. app (/\z. g z) y)

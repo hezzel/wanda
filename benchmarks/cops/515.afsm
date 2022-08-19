@@ -1,0 +1,7 @@
+map :  ((a -> a) -> (alist -> alist))
+nil :  alist
+cons :  (a -> (alist -> alist))
+
+map (/\x. f[x]) nil => nil
+map (/\x. f[x]) (cons x xs) => cons (f[x]) (map (/\x. f[x]) xs)
+map (/\x. f[x]) (map (/\x. g[x]) xs) => map (/\y. f[g[y]]) xs

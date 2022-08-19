@@ -1,0 +1,11 @@
+dom :  (nat -> (nat -> (nat -> nat)))
+s :  (nat -> nat)
+0 :  nat
+eval :  (nat -> (nat -> nat))
+fun :  ((nat -> nat) -> (nat -> (nat -> nat)))
+
+dom (s X) (s Y) (s Z) => s (dom X Y Z)
+dom 0 (s Y) (s Z) => s (dom 0 Y Z)
+dom X Y 0 => X
+dom 0 0 Z => 0
+eval (fun (/\x. F[x]) X Y) Z => F[dom X Y Z]

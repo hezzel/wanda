@@ -1,0 +1,11 @@
+a : o
+f : o -> o
+g : ((o -> o) -> o -> o) -> o
+
+f a => g (/\x:o -> o./\y:o.x (f y))
+g (/\x:o -> o./\y:o.H[x,y]) => H[/\z:o.a, a]
+
+==========
+A system where termination depends on whether or not the betafirst reduction
+strategy is used.
+

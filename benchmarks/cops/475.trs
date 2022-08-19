@@ -1,0 +1,15 @@
+(FUN
+  f : (a -> a) -> a
+  d : a
+)
+(VAR
+  F : a -> a
+  x : a
+)
+(RULES
+  f(\x.F(x)) -> F(f(\x. d))
+)
+(COMMENT
+[98] Example 14
+submitted by: Julian Nagele
+)

@@ -1,0 +1,6 @@
+P :  (o -> ((o -> o) -> ((o -> o) -> o)))
+L :  (o -> o)
+R :  (o -> o)
+
+P (L Z) (/\x. Zprime[x]) (/\x. Zprimestar[x]) => Zprime[Z]
+P (R Z) (/\x. Zprime[x]) (/\x. Zprimestar[x]) => Zprimestar[Z]

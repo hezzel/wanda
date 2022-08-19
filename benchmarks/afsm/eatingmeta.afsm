@@ -1,0 +1,10 @@
+0 : o
+f : (o -> o) -> o
+
+f (/\x:o.F[x]) => F[f (/\x:o.0)]
+
+=== COMMENTS ===
+
+* origin: thesis section 2.3.3
+* submitted: no
+

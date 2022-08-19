@@ -1,0 +1,7 @@
+fapp : (a -> b * a) --> b
+
+X : a -> b
+Y : a
+
+fapp(X, Y) => X * Y
+

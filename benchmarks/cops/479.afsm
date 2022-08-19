@@ -1,0 +1,6 @@
+apply :  ((o -> o) -> (o -> o))
+a :  o
+b :  o
+
+apply (/\x. F[x]) X => F[X]
+a => b

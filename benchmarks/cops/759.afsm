@@ -1,0 +1,7 @@
+app :  (term -> (term -> term))
+emb :  (value -> term)
+abs :  ((value -> term) -> value)
+
+app (emb (abs (/\x. M[x]))) (emb V) => M[V]
+app (app (emb (abs (/\x. M[x]))) N) L => app (emb (abs (/\x. app (M[x]) L))) N
+app (emb V) (app (emb (abs (/\x. M[x]))) N) => app (emb (abs (/\x. app (emb V) (M[x])))) N

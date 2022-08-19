@@ -1,0 +1,11 @@
+0 : nat
+s : (nat) --> nat
+rec : (nat * a * nat -> a -> a) --> a
+
+x : nat
+U : a
+X : nat -> a -> a
+
+rec(0, U, X) => U
+rec(s(x), U, X) => X * x * rec(x, U, X)
+

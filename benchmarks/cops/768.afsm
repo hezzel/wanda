@@ -1,0 +1,11 @@
+app :  Arab -> (a -> b)
+lam :  (a -> b) -> Arab
+pi1 :  Prab -> a
+pair : a -> (b -> Prab)
+pi2 :  Prab -> b
+
+app (lam (/\x. M[x])) N => M[N]
+lam (/\x. app L x) => L
+pi1 (pair S T) => S
+pi2 (pair S T) => T
+pair (pi1 U) (pi2 U) => U

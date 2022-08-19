@@ -1,0 +1,22 @@
+(FUN
+  abs : (term -> term) -> term
+  app : term -> term -> term  
+)
+(VAR
+  x : term
+  y : term
+  S : term
+  U : term
+  T : term -> term 
+  M : term -> term -> term
+)
+(RULES
+  app (abs (\x. T x)) S -> T S,
+  abs (\x. (app (abs (\y. M y x)) S) ) -> app (abs (\y. (abs (\x. M y x)))) S,
+  app (app (abs (\x. T x)) S) U -> app (abs (\x. (app (T x) U))) S
+)
+(COMMENT
+doi:10.1016/0304-3975(94)90012-4
+[87] Definition 3.1 with one rule reversed and untyped lambda-calculus
+submitted by: Beniamono Accattoli
+)

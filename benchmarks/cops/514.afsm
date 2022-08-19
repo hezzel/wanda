@@ -1,0 +1,20 @@
+d :  ((R -> R) -> (R -> R))
+0 :  R
+1 :  R
+minus :  (R -> R)
+plus :  (R -> (R -> R))
+star :  (R -> (R -> R))
+sin :  (R -> R)
+cos :  (R -> R)
+
+d (/\x. C) z => 0
+d (/\x. x) z => 1
+d (/\x. minus (F[x])) z => minus (d (/\x. F[x]) z)
+d (/\x. plus (F[x]) (G[x])) z => plus (d (/\x. F[x]) z) (d (/\x. G[x]) z)
+d (/\x. star (F[x]) (G[x])) z => plus (star (d (/\x. F[x]) z) (G[z])) (star (F[z]) (d (/\x. G[x]) z))
+d (/\x. sin (F[x])) z => star (cos z) (d (/\x. F[x]) z)
+d (/\x. cos (F[x])) z => star (minus (sin z)) (d (/\x. F[x]) z)
+minus 0 => 0
+star 0 x => 0
+star x 0 => 0
+plus 0 x => x

@@ -1,0 +1,18 @@
+map :  ((nat -> nat) -> (natlist -> natlist))
+nil :  natlist
+cons :  (nat -> (natlist -> natlist))
+at :  ((nat -> nat) -> (nat -> nat))
+pow :  ((nat -> nat) -> (nat -> (nat -> nat)))
+0 :  nat
+L :  ((nat -> nat) -> (nat -> nat))
+s :  (nat -> nat)
+op :  ((nat -> nat) -> ((nat -> nat) -> (nat -> nat)))
+
+map (/\x. F[x]) nil => nil
+map (/\x. F[x]) (cons h t) => cons (at F h) (map (/\x. F[x]) t)
+pow (/\x. F[x]) 0 y => L (/\x. x) y
+pow (/\x. F[x]) (s z) y => op (/\x. F[x]) (pow (/\x. F[x]) (s z)) y
+op (/\x. F[x]) (/\x. G[x]) y => at (/\x. F[x]) (at (/\x. G[x]) y)
+L (/\z. at (/\x. F[x]) z) y => F[y]
+L (/\z. op (/\x. F[x]) (/\x. G[x]) z) y => op (/\x. F[x]) (/\x. G[x]) y
+at (/\x. F[x]) z => F[z]

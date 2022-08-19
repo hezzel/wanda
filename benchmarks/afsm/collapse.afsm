@@ -1,0 +1,29 @@
+0 : nat
+s : nat -> nat
+nil : list
+cons : (nat -> nat) -> list -> list
+min : nat -> nat -> nat
+diff : nat -> nat -> nat
+gcd : nat -> nat -> nat
+build : nat -> list
+collapse : list -> nat
+
+min x 0 => 0
+min 0 y => 0
+min (s x) (s y) => s (min x y)
+diff x 0 => x
+diff 0 x => x
+diff (s x) (s y) => diff x y
+gcd (s x) 0 => s x
+gcd 0 (s x) => s x
+gcd (s x) (s y) => gcd (diff x y) (s (min x y))
+collapse nil => 0
+collapse (cons H T) => H (collapse T)
+build 0 => nil
+build (s n) => cons (/\x.gcd x n) (build n)
+
+=== COMMENTS ===
+
+* origin: RTA '12
+* submitted: yes
+

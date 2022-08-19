@@ -1,0 +1,31 @@
+o : N
+s : (N) --> N
+true : B
+false : B
+nil : list
+cons : (N * list) --> list
+if : (B * list * list) --> list
+lteq : (N * N) --> B
+from : (N * list) --> list
+chain : (N -> N * list) --> list
+incch : (list) --> list
+
+X : list
+Y : list
+Z : list
+M : N
+K : N
+H : N
+F : N -> N
+
+if(true, X, Y) => X
+if(false, X, Y) => Y
+lteq(s(M), o) => false
+lteq(o, M) => true
+lteq(s(M), s(K)) => lteq(M, K)
+from(M, nil) => nil
+from(M, cons(H, Z)) => if(lteq(M, H), cons(H, Z), from(M, Z))
+chain(F, nil) => nil
+chain(F, cons(H, Z)) => cons(F * H, chain(F, from(F * H, Z)))
+incch(X) => chain(/\x:N.s(x), X)
+

@@ -1,0 +1,34 @@
+(VAR
+  x : G
+  y : G
+  z : G
+  t : G -> G -> G
+  t1 : G -> G -> G
+  t2 : G -> G -> G
+  M : G -> G
+  N : G
+  x1 : G
+  x2 : G
+)
+(FUN
+  0 : G
+  union : G -> G -> G
+  fix : (G -> G) -> G
+  fix2 : (G -> G -> Pr<G_G>) -> Pr<G_G>
+  app : Ar<G_G> -> G -> G
+  lam : (G -> G) -> Ar<G_G>
+  pair : G -> G -> Pr<G_G>
+)
+(RULES
+  app(lam(\x.M x),N) -> M N,
+  fix2(\x1 x2. pair (t1 x1 x2) (t2 x1 x2))  -> pair (fix(\y. t1 y y), fix(\y. t2 y y) ),
+  union(x,0)  -> x,
+  union(0,y)  -> y,
+  union(union(x,y),z) -> union(x,union(y,z)),
+  union(x,y) -> union(y,x)
+)
+(COMMENT
+doi:10.1017/S096012951600027X
+[143] subsystem (with correction) of Figure 11; part of Cops #776
+submitted by: Makoto Hamana
+)

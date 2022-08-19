@@ -1,0 +1,5 @@
+app :  (term -> (term -> term))
+abs :  ((term -> term) -> term)
+
+app (abs (/\x. F[x])) S => F[S]
+abs (/\x. app S x) => S

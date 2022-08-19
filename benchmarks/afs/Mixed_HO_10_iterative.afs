@@ -1,0 +1,14 @@
+f : (o * o -> o) --> o
+g : (o * o * o -> o) --> o
+b : o
+a : o
+
+x : o
+y : o
+F : o -> o
+
+g(x, y, F) => f(f(x, F), F)
+f(x, F) => b
+b => a
+f(b, /\z:o.g(z, z, F)) => g(f(a, /\z:o.g(z, z, F)), f(b, /\z:o.b), F)
+

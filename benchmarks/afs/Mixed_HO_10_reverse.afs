@@ -1,0 +1,22 @@
+app : (list * list) --> list
+nil : list
+cons : (nat * list) --> list
+foldl : (list -> nat -> list * list * list) --> list
+reverse : (list) --> list
+reverse1 : (list) --> list
+iconsc : list -> nat -> list
+
+x : nat
+y : nat
+F : list -> nat -> list
+xs : list
+ys : list
+
+app(nil, xs) => xs
+app(cons(x, xs), ys) => cons(x, app(xs, ys))
+foldl(F, xs, nil) => xs
+foldl(F, xs, cons(y, ys)) => foldl(F, F * xs * y, ys)
+iconsc => /\xs:list./\x:nat.cons(x, xs)
+reverse(xs) => foldl(iconsc, nil, xs)
+reverse1(xs) => foldl(/\lx:list./\x:nat.app(cons(x, nil), lx), nil, xs)
+

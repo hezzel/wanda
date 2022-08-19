@@ -1,0 +1,15 @@
+f : (o -> o) -> o -> o -> o
+0 : o
+s : o -> o
+g : o -> o -> o
+either : o -> o -> o
+
+f F X 0 => 0
+f F X (s Y) => g Y (either Y (F X))
+g X Y => f (/\x:o.s 0) Y X
+
+=== COMMENTS ===
+
+* origin: thesis, ex. 7.23
+* submitted: yes
+

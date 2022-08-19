@@ -1,0 +1,7 @@
+f :  (((o -> o) -> (o -> o)) -> o)
+h :  (o -> (o -> o))
+g :  (o -> o)
+a :  o
+
+f (/\x, y. F[x, y]) => h (F[g, a]) (F[g, a])
+g a => f (/\x, y. h (x a) y)

@@ -1,0 +1,22 @@
+(FUN 
+  abs : (term -> term) -> term
+  app : term -> term -> term
+)
+(VAR
+  x : term
+  y : term
+  S : term
+  T : term
+  F : term -> term
+  G : term -> term
+  H : term -> term -> term
+)
+(RULES
+  app(abs(\x.x),S) -> S,
+  app(abs(\x.T),S) -> T,
+  app(abs(\x.app(F x,G x)),S) -> app(app(abs(\x.F x),S),app(abs(\x.G x),S)),
+  app(abs(\x.abs(\y.H x y)),S) -> abs(\y.app(abs(\x.H x y),S))
+)
+(COMMENT
+variation of rules in [136]
+)

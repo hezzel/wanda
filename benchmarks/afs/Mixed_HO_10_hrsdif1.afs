@@ -1,0 +1,9 @@
+0 : nat
+f : (nat) --> nat
+g : (nat -> nat) --> nat
+
+F : nat -> nat
+
+f(0) => g(/\x:nat.0)
+g(F) => F * f(0)
+

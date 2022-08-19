@@ -1,0 +1,3 @@
+letval :  (expr -> ((val -> expr) -> expr))
+
+letval T (/\x. letval U (/\y. V[x, y])) => letval U (/\y. letval T (/\x. V[x, y]))

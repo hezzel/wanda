@@ -1,0 +1,6 @@
+rec :  ((nat -> (A -> A)) -> (A -> (nat -> A)))
+0 :  nat
+s :  (nat -> nat)
+
+rec (/\x, y. F[x, y]) a 0 => a
+rec (/\x, y. F[x, y]) a (s n) => F[n, rec (/\x, y. F[x, y]) a n]

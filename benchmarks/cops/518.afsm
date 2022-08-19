@@ -1,0 +1,19 @@
+foldr :  ((a -> (a -> a)) -> (a -> (a -> a)))
+nil :  a
+cons :  (a -> (a -> a))
+build :  (((a -> (a -> a)) -> (a -> a)) -> a)
+sum :  (a -> a)
+add :  (a -> (a -> a))
+0 :  a
+down :  (a -> a)
+downprime :  (a -> ((a -> (a -> a)) -> (a -> a)))
+s :  (a -> a)
+
+foldr (/\x, y. k[x, y]) z nil => z
+foldr (/\x, y. k[x, y]) z (cons x xs) => k[x, foldr (/\x./\y. k[x, y]) z xs]
+build (/\k, z. g[k, z]) => g[cons, nil]
+foldr (/\x, y. k[x, y]) z (build g) => g[k, z]
+sum xs => foldr add 0 xs
+down x => build (/\k, z. downprime x (/\x, y. k x y) z)
+downprime 0 (/\x, y. k[x, y]) z => z
+downprime (s x) (/\x, y. k[x, y]) z => k[x, downprime x (/\x./\y. k[x, y]) z]

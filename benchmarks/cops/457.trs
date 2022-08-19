@@ -1,0 +1,22 @@
+(FUN
+  app : o -> o -> o
+  abs : (o -> o) -> o
+  or : o -> o -> o
+  tt : o
+)
+(VAR
+  x : o
+  y : o -> o
+  z : o
+)
+(RULES
+  app (abs (\x. y x)) z -> y z,
+  abs (\x. app z x) -> z,
+  or tt x -> tt,
+  or x tt -> tt
+)
+(COMMENT
+doi:10.1007/3-540-61254-8_26
+[104] Example 3.1
+submitted by: Julian Nagele
+)

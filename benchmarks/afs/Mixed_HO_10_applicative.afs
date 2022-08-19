@@ -1,0 +1,10 @@
+f : (o * o) --> o
+g : o -> o -> o
+a : o
+b : o
+
+F : o -> o
+G : o -> o
+
+f((/\z:o.F * z) * a, G * a) => g * (F * b) * (G * (F * b))
+

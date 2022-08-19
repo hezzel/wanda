@@ -1,0 +1,22 @@
+(FUN
+  f : (o -> o -> o) -> o
+  a : o
+  b : o
+  c : o
+  d : o
+)
+(VAR
+  y : o
+  x : o
+  F : o -> o
+)
+(RULES
+  f (\x y. F x) -> b,
+  b -> f (\x y. a),
+  b -> c,
+  f (\x y. a) -> d
+)
+(COMMENT
+[130] Example 7.16
+submitted by: Julian Nagele
+)

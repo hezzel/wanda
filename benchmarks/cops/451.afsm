@@ -1,0 +1,6 @@
+f :  (o -> o)
+b :  o
+a :  o
+
+f x => f b
+f a => f b

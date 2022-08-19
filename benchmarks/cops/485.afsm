@@ -1,0 +1,10 @@
+f :  (o -> (o -> o))
+b :  o
+g :  (o -> (o -> o))
+a :  o
+h :  ((o -> o) -> o)
+
+f x b => g x x
+g x a => f x x
+h (/\x. F[x]) => F[a]
+h (/\x. F[x]) => F[b]

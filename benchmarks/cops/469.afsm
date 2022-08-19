@@ -1,0 +1,8 @@
+all :  ((term -> form) -> form)
+and :  (form -> (form -> form))
+or :  (form -> (form -> form))
+
+all (/\x. P) => P
+all (/\x. and (Pprime[x]) (Qprime[x])) => and (all Pprime) (all Qprime)
+all (/\x. or (Pprime[x]) Q) => or (all Pprime) Q
+all (/\x. or P (Qprime[x])) => or P (all Qprime)

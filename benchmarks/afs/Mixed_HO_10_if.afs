@@ -1,0 +1,17 @@
+0 : nat
+h : (nat -> bool * nat -> nat * nat) --> nat
+if : (bool * nat * nat) --> nat
+true : bool
+false : bool
+s : (nat) --> nat
+
+X : nat
+Y : nat
+F : nat -> bool
+G : nat -> nat
+
+if(true, X, Y) => X
+if(false, X, Y) => Y
+h(F, G, 0) => 0
+h(F, G, s(Y)) => G * h(F, G, if(F * Y, Y, 0))
+

@@ -1,0 +1,7 @@
+nil : list
+cons : nat -> list -> list
+map : (nat -> nat) -> list -> list
+
+map F nil => nil
+map F (cons H T) => cons (F H) (map F T)
+

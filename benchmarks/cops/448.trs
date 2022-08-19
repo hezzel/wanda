@@ -1,0 +1,17 @@
+(FUN
+  f : o -> o -> o
+  a : o
+  b : o
+)
+(VAR
+  y : o
+  y' : o
+)
+(RULES
+  f(a, y) -> y,
+  f(y', b) -> y'
+)
+(COMMENT
+[84] Example 11.6.11(i)
+submitted by: Julian Nagele
+)

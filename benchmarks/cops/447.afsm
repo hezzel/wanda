@@ -1,0 +1,9 @@
+f :  (A -> A)
+g :  (A -> A)
+h :  (A -> A)
+a :  A
+b :  A
+
+f x => g x
+g x => h x
+a => b

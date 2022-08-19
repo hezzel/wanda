@@ -1,0 +1,27 @@
+(VAR
+  x : nat
+  n : var
+  y : nat
+  U : nat
+  F : nat -> nat -> nat
+  z1 : nat
+  z2 : nat
+)
+(FUN
+  0 : nat
+  s : nat -> nat
+  xplus : nat -> nat -> nat
+  xtimes : nat -> nat -> nat
+  rec : nat -> nat -> (nat -> nat -> nat) -> nat
+  v : var -> nat
+)
+(RULES
+  xplus(x,0) -> x,
+  xplus(x,s(y)) -> s(xplus(x,y)),
+  rec(0,U,\z1 z2.F z1 z2) -> U,
+  rec(s(v n),U,\z1 z2.F z1 z2) -> F(v n, rec(v n,U,\z1 z2.F z1 z2)),
+  xtimes(x,y) -> rec(y,0,(\z1.(\z2.xplus(x,z2))))
+)
+(COMMENT
+submitted by: Makoto Hamana; correction of COPS #756
+)

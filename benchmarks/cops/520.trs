@@ -1,0 +1,24 @@
+(VAR
+  F : bool -> bool
+  G : bool -> bool
+  x : bool
+  y : string
+  z : bool
+)
+(FUN
+  nil : string
+  1 : string -> string
+  0 : string -> string
+  true : bool
+  false : bool
+  not : bool -> bool
+  fold : (bool -> bool) -> (bool -> bool) -> bool -> string -> bool
+)
+(RULES
+  not true -> false,
+  not false -> true,
+  fold (\x. F x) (\x. G x) z nil -> z,
+  fold (\x. F x) (\x. G x) z (0 y) -> fold (\x. F x) (\x. G x) (F z) y,
+  fold (\x. F x) (\x. G x) z (1 y) -> fold (\x. F x) (\x. G x) (G z) y,
+  0 (1 y) -> 1 (0 y)
+)

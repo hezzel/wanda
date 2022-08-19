@@ -1,0 +1,28 @@
+s : nat -> nat
+nil : list
+app : list -> list -> list
+cons : nat -> list -> list
+shuffle : list -> list
+rshuffle : list -> list
+reverse : list -> list
+hrepeat : nat -> (list -> list) -> list -> list
+0 : nat
+ceilhalf : nat -> nat
+tail : list -> list
+head : list -> nat
+
+app nil L => L
+app (cons N L) Y => cons N (app L Y)
+reverse nil => nil
+reverse (cons N L) => app (reverse L) (cons N nil)
+shuffle nil => nil
+shuffle (cons N L) => cons N (shuffle (reverse L))
+ceilhalf 0 => 0
+ceilhalf (s 0) => s 0
+ceilhalf (s (s N)) => s (ceilhalf N)
+hrepeat 0 F L => L
+hrepeat (s N) F L => hrepeat (ceilhalf N) F (F L)
+tail (cons N L) => L
+head (cons N L) => N
+rshuffle L => hrepeat (head L) (/\z.shuffle z) (tail L)
+

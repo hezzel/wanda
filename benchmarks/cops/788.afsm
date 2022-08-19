@@ -1,0 +1,14 @@
+app :  (ArGG -> (G -> G))
+lam :  ((G -> G) -> ArGG)
+fix2 :  ((G -> (G -> PrGG)) -> PrGG)
+pair :  (G -> (G -> PrGG))
+fix :  ((G -> G) -> G)
+union :  (G -> (G -> G))
+0 :  G
+
+app (lam (/\x. M[x])) N => M[N]
+fix2 (/\x1, x2. pair (t1[x1, x2]) (t2[x1, x2])) => pair (fix (/\y. t1[y, y])) (fix (/\y. t2[y, y]))
+union x 0 => x
+union 0 y => y
+union (union x y) z => union x (union y z)
+union x y => union y x

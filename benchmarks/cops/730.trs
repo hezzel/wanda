@@ -1,0 +1,18 @@
+(FUN
+  get: S -> V
+  put: S -> V -> S
+)
+(VAR
+  X: S
+  Y: V
+)
+(RULES
+  put(X,get(X)) -> X,
+  get(put(X,Y)) -> Y,
+  put(put(X,Y),Y) -> put(X,Y)
+)
+(COMMENT
+doi:10.1007/978-3-319-19797-5_10
+[129] p. 216
+submitted by: Makoto Hamana
+)

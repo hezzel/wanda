@@ -1,0 +1,9 @@
+f :  (o -> (o -> o))
+a :  o
+s :  (o -> o)
+b :  o
+mu :  ((o -> o) -> o)
+
+f x x => a
+f x (s x) => b
+mu (/\x. Z[x]) => Z[mu (/\x. Z[x])]

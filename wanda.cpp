@@ -28,6 +28,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <random>
 
 void Wanda :: run(vector<string> args) {
   //if (args.size() >= 2) args.pop_back();
@@ -38,7 +39,7 @@ void Wanda :: run(vector<string> args) {
   // if runtime errors had an argument or were easy to deal with
   // immediately, get out
   if (error != "") {
-    cout << "ERROR" << endl << error << endl; 
+    cout << "ERROR" << endl << error << endl;
     return;
   }
   if (args.size() == 0) args.push_back("--manual");
@@ -52,7 +53,7 @@ void Wanda :: run(vector<string> args) {
       if (!wout.query_verbose() && silent) cout << args[i] << ": ";
       else cout << "++" << args[i] << ":" << endl;
     }
-    
+
     // read the system
     wout.print("We consider the system " +
       wout.parse_filename(args[i]) + ".\n");
@@ -292,14 +293,14 @@ void Wanda :: read_system(string filename) {
     }
     return;
   }
-  
+
   if (extension != "atrs" && extension != "afs" &&
       extension != "xml" && extension != "trs") {
-    
+
     error = "Unsupported style: " + extension + ".";
     return;
   }
-  
+
   int k = 2;
   string warning;
 
@@ -378,6 +379,18 @@ void Wanda :: write_system() {
   cout << endl;
 }
 
+// Windows compatibility layer for generation of random values.
+// Here, we use the <random> header for generating random integers.
+// This random number generation is compatible with non POSIX systems,
+// So no usage of "random()" is necessary.
+// Documentation: https://en.cppreference.com/w/cpp/numeric/random
+int generate_uniform_int(int n) {
+    std::random_device rd;
+    std::mt19937 e2(rd());
+    std::uniform_int_distribution<> dist(1, n);
+    return dist(e2);
+}
+
 void Wanda :: rewrite_term() {
   cout << "Please enter a term you would like to see normalised.  "
        << "The type may be included (in the form term : type) or "
@@ -416,7 +429,8 @@ void Wanda :: rewrite_term() {
     nonterminator.possible_reductions(term, reducable_rule,
                                       reducable_pos);
     if (reducable_pos.size() == 0) break;
-    int N = random() % reducable_pos.size();
+    // int N = random() % reducable_pos.size();
+    int N = generate_uniform_int(reducable_pos.size());
     term = reducable_rule[N]->apply(term, reducable_pos[N]);
     cout << "  =>" << endl << "  " << term->to_string();
   }
@@ -427,7 +441,7 @@ void Wanda :: respond(string answer) {
   if (answer == "NO") total_no++;
   if (answer == "YES") total_yes++;
   if (answer == "MAYBE") total_maybe++;
-  
+
   cout << answer << endl;
   if (!silent) { wout.print_output(outputfile); }
 }
@@ -519,7 +533,7 @@ string Wanda :: prove_termination(Alphabet &F, vector<MatchRule*> &R,
       return "NO";
     }
   }
-  
+
   // in rare cases, rule removal may catch systems which dependency
   // pairs do not; for these cases, try full rule removal, so
   // including product polynomials, afterwards
@@ -561,7 +575,7 @@ void Wanda :: determine_termination() {
       F.clear();
       for (i = 0; i < R.size(); i++) delete R[i];
       R.clear();
-      
+
       if (simplified_result == "MAYBE") { // we're going on!
         Sigma.copy(F);
         for (i = 0; i < rules.size(); i++) R.push_back(rules[i]->copy());

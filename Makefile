@@ -1,10 +1,28 @@
 objects = afs.o alphabet.o beta.o dependencypair.o dependencygraph.o dpframework.o environment.o firstorder.o formula.o horpo.o horpoconstraintlist.o horpojustifier.o inputreaderafs.o inputreaderafsm.o inputreaderatrs.o inputreaderfo.o matchrule.o nonterminator.o orderingproblem.o outputmodule.o polconstraintlist.o polymodule.o bitblaster.o polynomial.o rule.o rulesmanipulator.o ruleremover.o sat.o smt.o subcritchecker.o substitution.o term.o textconverter.o type.o typer.o typesubstitution.o varset.o wanda.o xmlreader.o
 
 goal : wanda.exe converter.exe
-	
 
+################################################################################
+# In order to compile Wanda on macOS a.k.a Darwin Systems,
+# dynamic linking is necessary.
+# Static linking will not work on Mac OS X unless all libraries
+# (including libgcc.a) have also been compiled with -static.
+# Since neither a static version of libSystem.dylib nor crt0.o are provided,
+# this option will not be supported on macs.
+# Below, there is an updated version of the linking for macs and non-macs.
+# The linking remain static on other systems.
+# Below we check if the system is darwin, which will use dynamic linking,
+# or any other system (Tested on Linux and Windows/WinGW) which will use static.
+################################################################################
+
+SYS := $(shell gcc -dumpmachine)
+ifneq (, $(findstring darwin, $(SYS)))
+wanda.exe : $(objects)
+	g++ -o wanda.exe $(objects)
+else
 wanda.exe : $(objects)
 	g++ -static -o wanda.exe $(objects)
+endif
 
 converter.exe : afs.o alphabet.o beta.o dependencypair.o environment.o inputreaderafs.o inputreaderafsm.o inputreaderatrs.o inputreaderatrs.o inputreaderfo.o matchrule.o outputmodule.o polynomial.o rule.o substitution.o term.o textconverter.o type.o typer.o typesubstitution.o varset.o xmlreader.o converter.cpp converter.h
 	g++ -o converter.exe converter.cpp afs.o alphabet.o beta.o dependencypair.o environment.o inputreaderafs.o inputreaderafsm.o inputreaderatrs.o matchrule.o outputmodule.o polynomial.o rule.o substitution.o term.o textconverter.o type.o typer.o typesubstitution.o varset.o xmlreader.o

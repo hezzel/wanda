@@ -103,8 +103,9 @@ bool SatSolver :: solve(PFormula &formula) {
     fclose(fout);
 
     // now run minisat on the generated file
-    system("./resources/timeout 20 ./resources/satsolver resources/input resources/output > /dev/null");
-    
+    // system("./resources/timeout 20 ./resources/satsolver resources/input resources/output > /dev/null");
+    system("./resources/timeout.sh 20 ./resources/satsolver resources/input resources/output > /dev/null");
+
     // and read the results!
     FILE *fin = fopen("resources/output", "r");
     char check[10];

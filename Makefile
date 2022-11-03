@@ -7,6 +7,7 @@ SRC_DIRS := ./src
 TARGET_EXEC := wanda.exe
 CONVERTER_EXEC := converter.exe
 SAT_SOLVER_REPO := https://github.com/deividrvale/minisat.git
+NATT_SRC_ZIP := NaTT.2.3.tar.gz
 
 # All sources compose Wanda, execept 'converter.cpp' which is a secondary utility.
 SRCS := $(shell find $(SRC_DIRS) -name '*.cpp')
@@ -48,14 +49,14 @@ all: $(OBJS)
 ifneq (, $(findstring darwin, $(SYS)))
 WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
 # Build Wanda Executable macOS.
-$(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat $(OBJS) $(WANDA_OBJS)
-	@echo "Building Wanda Executable..."
+$(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat build_natt $(OBJS) $(WANDA_OBJS)
+	@echo "Building Wanda macOs Executable..."
 	@$(CXX) $(WANDA_OBJS) -o $@ $(LDFLAGS)
 else ifneq (, $(findstring linux, $(SYS)))
 # Build Wanda Executable Linux.
 WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
-$(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat $(OBJS) $(WANDA_OBJS)
-	@echo "Building Wanda Executable."
+$(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat build_natt $(OBJS) $(WANDA_OBJS)
+	@echo "Building Wanda Linux Executable..."
 	mkdir -p $(dir $@)
 	@$(CXX) -static -o $@ $(WANDA_OBJS) $(LDFLAGS)
 else
@@ -86,6 +87,19 @@ $(BUILD_DIR)/minisat/bin/minisat:
 	cd $(BUILD_DIR)/minisat && cmake . && $(MAKE)
 	@echo "Installing minisat executable as satsolver in Wanda's resources folder."
 	cp $(BUILD_DIR)/minisat/bin/minisat $(BIN_DIR)/resources/satsolver
+
+# Alias for $(BUILD_DIR)/NaTT
+build_natt : $(BUILD_DIR)/NaTT
+
+$(BUILD_DIR)/NaTT:
+	@echo "Extracting NaTT source files."
+	@mkdir -p $(dir $(BUILD_DIR))
+	tar -xf resources/$(NATT_SRC_ZIP) -C $(BUILD_DIR)
+	@echo "Building NaTT using opam..."
+	cd $(BUILD_DIR)/NaTT  && $(MAKE)
+	@echo "Done."
+	@echo "Installing NaTT as the firstorder prover in Wanda's resources folder."
+	cp $(BUILD_DIR)/NaTT/bin/NaTT.exe $(BIN_DIR)/resources/natt
 
 install_resources :
 	@echo "Installing resources to binary folder..."

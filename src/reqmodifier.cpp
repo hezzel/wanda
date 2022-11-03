@@ -14,7 +14,10 @@
    limitations under the License.
  *************************************************************************/
 
+#include "reqmodifier.h"
 #include "environment.h"
+#include "formula.h"
+#include "term.h"
 #include "beta.h"
 #include "substitution.h"
 #include "nonterminator.h"
@@ -71,23 +74,23 @@ Reqlist RequirementModifier :: create_basic_requirements(DPSet &D,
                                           Ruleset &A, bool extend) {
   int i;
   Reqlist ret;
-  
+
   for (i = 0; i < D.size(); i++) {
     PTerm left = D[i]->query_left()->copy();
     PTerm right = D[i]->query_right();
-    if (extend && right->query_application() && 
+    if (extend && right->query_application() &&
         right->query_head()->query_meta()) {
       vector<PTerm> parts = right->split();
       vector<PTerm> children;
       int i;
       for (i = 0; i < parts[0]->number_children(); i++) {
         children.push_back(parts[0]->get_child(i)->copy());
-      }    
+      }
       for (i = 1; i < parts.size(); i++) children.push_back(parts[i]);
       PVariable Z = dynamic_cast<MetaApplication*>(parts[0])->get_metavar();
       Z = dynamic_cast<PVariable>(Z->copy());
       right = new MetaApplication(Z, children);
-    }    
+    }
     else right = right->copy();
     Substitution gamma;
     set<int> binders;
@@ -149,7 +152,7 @@ string RequirementModifier :: make_base(Reqlist &reqs) {
 
 void RequirementModifier :: lower(Reqlist &reqs) {
   vector<PTerm> subs;
-  
+
   for (int i = 0; i < reqs.size(); i++) {
     subs.push_back(reqs[i]->left);
     subs.push_back(reqs[i]->right);
@@ -355,7 +358,7 @@ bool RequirementModifier :: symbol_occurs(string symbol, PTerm term) {
 string RequirementModifier :: remove_consequences(Reqlist &reqs) {
   int i, j;
   string ret;
-  
+
   for (i = 0; i < reqs.size(); i++) {
     if (reqs[i] == NULL) continue;
     for (j = 0; j < reqs.size(); j++) {
@@ -401,7 +404,7 @@ string RequirementModifier :: remove_consequences(Reqlist &reqs) {
     reqs.pop_back();
     i--;
   }
-  
+
   return ret;
 }
 
@@ -409,8 +412,8 @@ bool RequirementModifier :: always_ge(PTerm a, PTerm b, Renaming &rn,
                                       bool lhs) {
   // only terms of equal types can be compared
   if (!a->query_type()->equals(b->query_type())) return false;
-  
-  if (b->query_constant() && 
+
+  if (b->query_constant() &&
       dynamic_cast<PConstant>(b)->query_name().substr(0,2) == "~c")
     return true;
 
@@ -432,7 +435,7 @@ bool RequirementModifier :: always_ge(PTerm a, PTerm b, Renaming &rn,
       return rn[id1] == id2;
     }
   }
-  
+
   if (a->query_meta()) {
     PVariable avar = dynamic_cast<MetaApplication*>(a)->get_metavar();
     if (!lhs && rn.find(avar->query_index()) == rn.end()) return true;
@@ -448,7 +451,7 @@ bool RequirementModifier :: always_ge(PTerm a, PTerm b, Renaming &rn,
     }
     return true;
   }
-  
+
   if (a->query_abstraction()) {
     if (!b->query_abstraction()) return false;
     PVariable avar =
@@ -462,7 +465,7 @@ bool RequirementModifier :: always_ge(PTerm a, PTerm b, Renaming &rn,
     else rn.erase(avar->query_index());
     return ret;
   }
-  
+
   if (a->query_constant()) return a->equals(b);
 
   if (!a->query_application()) return false;    // errrr
@@ -511,7 +514,7 @@ bool RequirementModifier :: always_ge(PTerm a, PTerm b, Renaming &rn,
     if (always_ge(sub, b, rn, lhs)) return true;
     else rn = backup;
   }
-  
+
   // all options are exhausted!
   return false;
 }
@@ -628,7 +631,7 @@ bool RequirementModifier :: simple_argument_functions(Reqlist &reqs,
   for (i = 0; i < orientedsymbols.size(); i++) {
     string f = orientedsymbols[i];
     vector<PTerm> parts;
-    // create variables x1 ... xn with n = arity(f), and form f x1 ... xn 
+    // create variables x1 ... xn with n = arity(f), and form f x1 ... xn
     vector<MetaApplication*> xs;
     PType ftype = F.query_type(f);
     PTerm left = F.get(f);
@@ -772,7 +775,7 @@ ArList RequirementModifier :: get_arities_in(Reqlist &reqs, ArList &original) {
       else if (f.substr(0,2) != "~c") ret[f] = original[f];
     }
   }
-  
+
   return ret;
 }
 

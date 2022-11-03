@@ -38,6 +38,7 @@
 #include "alphabet.h"
 #include "dependencypair.h"
 #include "matchrule.h"
+#include "environment.h"
 
 class OrderingRequirement {
   public:
@@ -53,7 +54,7 @@ class OrderingRequirement {
         :left(l), right(r), desc(d) {
       if (extra != -1) data.push_back(extra);
     }
-    
+
     ~OrderingRequirement() {
       if (left != NULL) delete left;
       if (right != NULL) delete right;
@@ -119,7 +120,7 @@ class RequirementModifier {
     bool symbol_occurs(string symbol, PTerm term);
       // returns whether the given symbol occurs anywhere in the
       // given term
-    
+
     bool always_ge(PTerm l, PTerm r, Renaming &ren, bool lhs);
       // returns whether l >= r using either HORPO or polynomial
       // orderings
@@ -134,7 +135,7 @@ class RequirementModifier {
     Varset unfiltered_metavars(PTerm r, ArList &arities);
       // returns meta-variables in a term which cannot get filtered
       // away, on account of not being below an untagged symbol
-    
+
     void execute_argument_function(Reqlist &reqs, PTerm l, PTerm r);
       // replaces l everywhere by r
 
@@ -164,7 +165,7 @@ class RequirementModifier {
 
     void lower(Reqlist &reqs);
       // replace symbols f# by the corresponding f
-    
+
     string collapse_types(Reqlist &reqs, Alphabet &F, Alphabet &newF,
                           ArList &ars);
       // type-collapses the requirements (all data types become "o"),
@@ -199,7 +200,7 @@ class RequirementModifier {
     void add_upping_reqs(Reqlist &reqs, Alphabet &F);
       // for all symbols f# occurring in the reqs, adds a requirement
       // f(x1,...,xn) >= f#(x1,...,xn)
-    
+
     void remove_marks(Reqlist &reqs);
       // changes symbols f# at the top back to f
 

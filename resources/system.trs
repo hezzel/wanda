@@ -1,7 +1,10 @@
-(VAR %X)
+(VAR %X %Y %Z)
 (RULES
-  h(0) -> a(0)
-  h(s(%X)) -> a(h(%X))
-  i(0) -> 0
-  i(a(%X)) -> s(i(%X))
+  append(nil,%X) -> %X
+  append(cons(%X,%Y),%Z) -> cons(%X,append(%Y,%Z))
+  reverse(nil) -> nil
+  shuffle(nil) -> nil
+  shuffle(cons(%X,%Y)) -> cons(%X,shuffle(reverse(%Y)))
+  mirror(nil) -> nil
+  mirror(cons(%X,%Y)) -> append(cons(%X,mirror(%Y)),cons(%X,nil))
 )

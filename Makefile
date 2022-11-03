@@ -46,18 +46,20 @@ all: $(OBJS)
 # ################################################################################
 
 ifneq (, $(findstring darwin, $(SYS)))
-# Build Wanda Executable macOS.
 WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
+# Build Wanda Executable macOS.
 $(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat $(OBJS) $(WANDA_OBJS)
 	@echo "Building Wanda Executable..."
 	@$(CXX) $(WANDA_OBJS) -o $@ $(LDFLAGS)
-else
+else ifneq (, $(findstring linux, $(SYS)))
 # Build Wanda Executable Linux.
 WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
-$(BUILD_DIR)/$(TARGET_EXEC): install_resources build_minisat $(OBJS) $(WANDA_OBJS)
+$(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat $(OBJS) $(WANDA_OBJS)
 	@echo "Building Wanda Executable."
 	mkdir -p $(dir $@)
-	@$(CXX) $(WANDA_OBJS) -o $@ $(LDFLAGS) - static
+	@$(CXX) -static -o $@ $(WANDA_OBJS) $(LDFLAGS)
+else
+# other platforms will be added later
 endif
 
 # Build Converter Executable

@@ -48,10 +48,8 @@ all: $(OBJS)
 ifneq (, $(findstring darwin, $(SYS)))
 # Build Wanda Executable macOS.
 WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
-$(BIN_DIR)/$(TARGET_EXEC): build_minisat $(OBJS) $(WANDA_OBJS)
+$(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat $(OBJS) $(WANDA_OBJS)
 	@echo "Building Wanda Executable..."
-	mkdir -p $(dir $@)
-	cp -r resources $(BIN_DIR)
 	@$(CXX) $(WANDA_OBJS) -o $@ $(LDFLAGS)
 else
 # Build Wanda Executable Linux.
@@ -74,14 +72,23 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 	mkdir -p $(dir $@)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
+# Alias for $(BUILD_DIR)/minisat/bin/minisat.
+build_minisat: $(BUILD_DIR)/minisat/bin/minisat
+
 # Clone minisat from github
-build_minisat :
+$(BUILD_DIR)/minisat/bin/minisat:
 	@mkdir -p $(dir $(BUILD_DIR))
 	@echo "Cloning minisat from github..."
+	@rm -rf $(BUILD_DIR)/minisat
 	git clone $(SAT_SOLVER_REPO) $(BUILD_DIR)/minisat
-	@cd $(BUILD_DIR)/minisat && cmake .
-# cmake $(BUILD_DIR)/minisat
+	cd $(BUILD_DIR)/minisat && cmake . && $(MAKE)
+	@echo "Installing minisat executable as satsolver in Wanda's resources folder."
+	cp $(BUILD_DIR)/minisat/bin/minisat $(BIN_DIR)/resources/satsolver
 
+install_resources :
+	@echo "Installing resources to binary folder..."
+	@mkdir -p $(BIN_DIR)
+	cp -r resources $(BIN_DIR)
 
 .PHONY: clean
 clean:

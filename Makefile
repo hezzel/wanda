@@ -48,20 +48,15 @@ all: $(OBJS)
 ifneq (, $(findstring darwin, $(SYS)))
 # Build Wanda Executable macOS.
 WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
-$(BIN_DIR)/$(TARGET_EXEC): $(OBJS) $(WANDA_OBJS)
-	mkdir -p $(dir $(BUILD_DIR))
-	@echo "Building Wanda Executable."
-	@echo "Cloning resources from github..."
-	git clone $(SAT_SOLVER_REPO) $(BUILD_DIR)/minisat
-	cmake $(BUILD_DIR)/minisat
-	make
+$(BIN_DIR)/$(TARGET_EXEC): build_minisat $(OBJS) $(WANDA_OBJS)
+	@echo "Building Wanda Executable..."
 	mkdir -p $(dir $@)
 	cp -r resources $(BIN_DIR)
 	@$(CXX) $(WANDA_OBJS) -o $@ $(LDFLAGS)
 else
 # Build Wanda Executable Linux.
 WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
-$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS) $(WANDA_OBJS)
+$(BUILD_DIR)/$(TARGET_EXEC): build_minisat $(OBJS) $(WANDA_OBJS)
 	@echo "Building Wanda Executable."
 	mkdir -p $(dir $@)
 	@$(CXX) $(WANDA_OBJS) -o $@ $(LDFLAGS) - static
@@ -71,13 +66,22 @@ endif
 CONVERTER_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'wanda.cpp.o')
 $(BIN_DIR)/$(CONVERTER_EXEC): $(CONVERTER_OBJS)
 	@echo 'Building Wanda Executable.\n'
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(CXX) $(CONVERTER_OBJS) -o $@ $(LDFLAGS)
 
 # Build step for C++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	mkdir -p $(dir $@)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+# Clone minisat from github
+build_minisat :
+	@mkdir -p $(dir $(BUILD_DIR))
+	@echo "Cloning minisat from github..."
+	git clone $(SAT_SOLVER_REPO) $(BUILD_DIR)/minisat
+	@cd $(BUILD_DIR)/minisat && cmake .
+# cmake $(BUILD_DIR)/minisat
+
 
 .PHONY: clean
 clean:

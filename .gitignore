@@ -2,6 +2,10 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=cmake,c++
 .DS_Store
 
+# Build folders
+build
+bins
+
 ### C++ ###
 # Prerequisites
 *.d

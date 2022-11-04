@@ -55,7 +55,7 @@ $(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat build_natt $(OBJS) $(
 else ifneq (, $(findstring linux, $(SYS)))
 # Build Wanda Executable Linux.
 WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
-$(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat build_natt $(OBJS) $(WANDA_OBJS)
+$(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat $(OBJS) $(WANDA_OBJS)
 	@echo "Building Wanda Linux Executable..."
 	mkdir -p $(dir $@)
 	@$(CXX) -static -o $@ $(WANDA_OBJS) $(LDFLAGS)
@@ -101,6 +101,7 @@ $(BUILD_DIR)/NaTT:
 	cd $(BUILD_DIR)/NaTT && $(MAKE)
 	@echo "Done."
 	@echo "Installing NaTT as the firstorder prover in Wanda's resources folder."
+	rm -rf $(BIN_DIR)/resources/natt/NaTT.exe
 	cp $(BUILD_DIR)/NaTT/bin/NaTT.exe $(BIN_DIR)/resources/natt
 
 install_resources :

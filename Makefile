@@ -96,7 +96,9 @@ $(BUILD_DIR)/NaTT:
 	@mkdir -p $(dir $(BUILD_DIR))
 	tar -xf resources/$(NATT_SRC_ZIP) -C $(BUILD_DIR)
 	@echo "Building NaTT using opam..."
-	cd $(BUILD_DIR)/NaTT  && $(MAKE)
+	opam install ocamlfind ocamlgraph re
+	opam install xml-light
+	cd $(BUILD_DIR)/NaTT && $(MAKE)
 	@echo "Done."
 	@echo "Installing NaTT as the firstorder prover in Wanda's resources folder."
 	cp $(BUILD_DIR)/NaTT/bin/NaTT.exe $(BIN_DIR)/resources/natt

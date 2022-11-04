@@ -1,0 +1,25 @@
+td.symbol {
+  text-align: right;
+}
+
+td.colon {
+  width: 2em;
+  text-align: center;
+}
+
+td.lhs {
+  text-align: right;
+}
+
+td.rulestep {
+  width: 3em;
+  text-align: center;
+}
+
+span.variable {
+  color: blue;
+}
+
+span.constant {
+  color: red;
+}

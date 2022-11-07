@@ -55,7 +55,7 @@ $(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat build_natt $(OBJS) $(
 else ifneq (, $(findstring linux, $(SYS)))
 # Build Wanda Executable Linux.
 WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
-$(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat $(OBJS) $(WANDA_OBJS)
+$(BIN_DIR)/$(TARGET_EXEC): install_resources $(OBJS) $(WANDA_OBJS)
 	@echo "Building Wanda Linux Executable..."
 	mkdir -p $(dir $@)
 	@$(CXX) -static -o $@ $(WANDA_OBJS) $(LDFLAGS)

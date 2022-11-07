@@ -86,6 +86,7 @@ $(BUILD_DIR)/minisat/bin/minisat:
 	git clone $(SAT_SOLVER_REPO) $(BUILD_DIR)/minisat
 	cd $(BUILD_DIR)/minisat && cmake . && $(MAKE)
 	@echo "Installing minisat executable as satsolver in Wanda's resources folder."
+	mkdir -p $(BIN_DIR)/resources
 	cp $(BUILD_DIR)/minisat/bin/minisat $(BIN_DIR)/resources/satsolver
 
 # Alias for $(BUILD_DIR)/NaTT

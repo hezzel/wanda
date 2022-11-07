@@ -1,243 +1,377 @@
-objects = afs.o alphabet.o beta.o dependencypair.o dependencygraph.o dpframework.o environment.o firstorder.o formula.o horpo.o horpoconstraintlist.o horpojustifier.o inputreaderafs.o inputreaderafsm.o inputreaderatrs.o inputreaderfo.o matchrule.o nonterminator.o orderingproblem.o outputmodule.o polconstraintlist.o polymodule.o bitblaster.o polynomial.o rule.o rulesmanipulator.o ruleremover.o sat.o smt.o subcritchecker.o substitution.o term.o textconverter.o type.o typer.o typesubstitution.o varset.o wanda.o xmlreader.o
+# Variable declarations
+CXX = g++
+SYS := $(shell gcc -dumpmachine)
+BUILD_DIR := ./build
+BIN_DIR := ./bin
+SRC_DIRS := ./src
+TARGET_EXEC := wanda.exe
+CONVERTER_EXEC := converter.exe
+SAT_SOLVER_REPO := https://github.com/deividrvale/minisat.git
+NATT_SRC_ZIP := NaTT.2.3.tar.gz
+
+# All sources compose Wanda, execept 'converter.cpp' which is a secondary utility.
+SRCS := $(shell find $(SRC_DIRS) -name '*.cpp')
+
+# List of object files based on the list of source files.
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+
+# List of dependency files from objects.
+DEPS := $(OBJS:.o=.d)
+
+# Giving every folder in .src to gcc so it can solve dependency automatically.
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+# Add a prefix to INC_DIRS.
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
+
+# The -MMD and -MP flags together generate Makefiles for us!
+# These files will have .d instead of .o as the output.
+CPPFLAGS := $(INC_FLAGS) -MMD -MP
+
+all: $(OBJS)
+	@echo "Build scheme set to " $(SYS).
+	@$(MAKE) $(BIN_DIR)/$(TARGET_EXEC)
+	@$(MAKE) $(BIN_DIR)/$(CONVERTER_EXEC)
+
+
+# ################################################################################
+# # In order to compile Wanda on macOS a.k.a Darwin Systems,
+# # dynamic linking is necessary.
+# # Static linking will not work on Mac OS X unless all libraries
+# # (including libgcc.a) have also been compiled with -static.
+# # Since neither a static version of libSystem.dylib nor crt0.o are provided,
+# # this option will not be supported on macs.
+# # Below, there is an updated version of the linking for macs and non-macs.
+# # The linking remain static on other systems.
+# # Below we check if the system is darwin, which will use dynamic linking,
+# # or any other system (Tested on Linux and Windows/WinGW) which will use static.
+# ################################################################################
+
+ifneq (, $(findstring darwin, $(SYS)))
+WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
+# Build Wanda Executable macOS.
+$(BIN_DIR)/$(TARGET_EXEC): install_resources build_minisat build_natt $(OBJS) $(WANDA_OBJS)
+	@echo "Building Wanda macOs Executable..."
+	@$(CXX) $(WANDA_OBJS) -o $@ $(LDFLAGS)
+else ifneq (, $(findstring linux, $(SYS)))
+# Build Wanda Executable Linux.
+WANDA_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'converter.cpp.o')
+$(BIN_DIR)/$(TARGET_EXEC): install_resources $(OBJS) $(WANDA_OBJS)
+	@echo "Building Wanda Linux Executable..."
+	mkdir -p $(dir $@)
+	@$(CXX) -static -o $@ $(WANDA_OBJS) $(LDFLAGS)
+else
+# other platforms will be added later
+endif
+
+# Build Converter Executable
+CONVERTER_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'wanda.cpp.o')
+$(BIN_DIR)/$(CONVERTER_EXEC): $(CONVERTER_OBJS)
+	@echo 'Building Wanda Executable.\n'
+	@mkdir -p $(dir $@)
+	$(CXX) $(CONVERTER_OBJS) -o $@ $(LDFLAGS)
+
+# Build step for C++ source
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+# Alias for $(BUILD_DIR)/minisat/bin/minisat.
+build_minisat: $(BUILD_DIR)/minisat/bin/minisat
+
+# Clone minisat from github
+$(BUILD_DIR)/minisat/bin/minisat:
+	@mkdir -p $(dir $(BUILD_DIR))
+	@echo "Cloning minisat from github..."
+	@rm -rf $(BUILD_DIR)/minisat
+	git clone $(SAT_SOLVER_REPO) $(BUILD_DIR)/minisat
+	cd $(BUILD_DIR)/minisat && cmake . && $(MAKE)
+	@echo "Installing minisat executable as satsolver in Wanda's resources folder."
+	mkdir -p $(BIN_DIR)/resources
+	cp $(BUILD_DIR)/minisat/bin/minisat $(BIN_DIR)/resources/satsolver
+
+# Alias for $(BUILD_DIR)/NaTT
+build_natt : $(BUILD_DIR)/NaTT
+
+$(BUILD_DIR)/NaTT:
+	@echo "Extracting NaTT source files."
+	@mkdir -p $(dir $(BUILD_DIR))
+	tar -xf resources/$(NATT_SRC_ZIP) -C $(BUILD_DIR)
+	@echo "Building NaTT using opam..."
+	opam install ocamlfind ocamlgraph re
+	opam install xml-light
+	cd $(BUILD_DIR)/NaTT && $(MAKE)
+	@echo "Done."
+	@echo "Installing NaTT as the firstorder prover in Wanda's resources folder."
+	rm -rf $(BIN_DIR)/resources/natt/NaTT.exe
+	cp $(BUILD_DIR)/NaTT/bin/NaTT.exe $(BIN_DIR)/resources/natt
 
-goal : wanda.exe converter.exe
-	
+install_resources :
+	@echo "Installing resources to binary folder..."
+	@mkdir -p $(BIN_DIR)
+	cp -r resources $(BIN_DIR)
 
-wanda.exe : $(objects)
-	g++ -static -o wanda.exe $(objects)
+.PHONY: clean
+clean:
+	rm -rf $(BUILD_DIR)
+	rm -rf $(BIN_DIR)
 
-converter.exe : afs.o alphabet.o beta.o dependencypair.o environment.o inputreaderafs.o inputreaderafsm.o inputreaderatrs.o inputreaderatrs.o inputreaderfo.o matchrule.o outputmodule.o polynomial.o rule.o substitution.o term.o textconverter.o type.o typer.o typesubstitution.o varset.o xmlreader.o converter.cpp converter.h
-	g++ -o converter.exe converter.cpp afs.o alphabet.o beta.o dependencypair.o environment.o inputreaderafs.o inputreaderafsm.o inputreaderatrs.o matchrule.o outputmodule.o polynomial.o rule.o substitution.o term.o textconverter.o type.o typer.o typesubstitution.o varset.o xmlreader.o
+# Include the .d makefiles. The - at the front suppresses the errors of missing
+# Makefiles. Initially, all the .d files will be missing, and we don't want those
+# errors to show up.
+-include $(DEPS)
 
-afs.o : afs.cpp afs.h outputmodule.h substitution.h
-	g++ -c afs.cpp
 
-afs.h : term.h alphabet.h environment.h matchrule.h
-	touch afs.h
 
-alphabet.o : alphabet.cpp alphabet.h
-	g++ -c alphabet.cpp
 
-alphabet.h : type.h term.h
-	touch alphabet.h
 
-beta.o : beta.cpp beta.h substitution.h
-	g++ -c beta.cpp
 
-beta.h : term.h rule.h
-	touch beta.h
+# all :
+# 	echo 'Setting build scheme to' ${SYS}
 
-bitblaster.o : bitblaster.cpp bitblaster.h polconstraintlist.h sat.h
-	g++ -c bitblaster.cpp
+# goal : wanda.exe converter.exe
 
-bitblaster.h : polynomial.h formula.h
-	touch bitblaster.h
 
-dependencypair.o : dependencypair.cpp dependencypair.h environment.h
-	g++ -c dependencypair.cpp
 
-dependencypair.h : term.h
-	touch dependencypair.h
 
-dependencygraph.o : dependencygraph.cpp dependencygraph.h outputmodule.h substitution.h
-	g++ -c dependencygraph.cpp
+# ifneq (, $(findstring darwin, $(SYS)))
+# wanda.exe : $(objects)
+# 	g++ -o wanda.exe $(objects)
+# else
+# wanda.exe : $(objects)
+# 	g++ -static -o wanda.exe $(objects)
+# endif
 
-dependencygraph.h : dependencypair.h typer.h matchrule.h
-	touch dependencygraph.h
+# converter.exe : afs.o alphabet.o beta.o dependencypair.o environment.o inputreaderafs.o inputreaderafsm.o inputreaderatrs.o inputreaderatrs.o inputreaderfo.o matchrule.o outputmodule.o polynomial.o rule.o substitution.o term.o textconverter.o type.o typer.o typesubstitution.o varset.o xmlreader.o converter.cpp converter.h
+# 	g++ -o converter.exe converter.cpp afs.o alphabet.o beta.o dependencypair.o environment.o inputreaderafs.o inputreaderafsm.o inputreaderatrs.o matchrule.o outputmodule.o polynomial.o rule.o substitution.o term.o textconverter.o type.o typer.o typesubstitution.o varset.o xmlreader.o
 
-dpframework.o : dpframework.cpp dpframework.h beta.h environment.h horpo.h outputmodule.h polymodule.h subcritchecker.h substitution.h term.h
-	g++ -c dpframework.cpp
+# afs.o : afs.cpp afs.h outputmodule.h substitution.h
+# 	g++ -c afs.cpp
 
-dpframework.h : alphabet.h dependencypair.h dependencygraph.h firstorder.h orderingproblem.h rulesmanipulator.h
-	touch dpframework.h
+# afs.h : term.h alphabet.h environment.h matchrule.h
+# 	touch afs.h
 
-environment.o : environment.cpp environment.h term.h
-	g++ -c environment.cpp
+# alphabet.o : alphabet.cpp alphabet.h
+# 	g++ -c alphabet.cpp
 
-environment.h : type.h varset.h
-	touch environment.h
+# alphabet.h : type.h term.h
+# 	touch alphabet.h
 
-firstorder.o : firstorder.cpp firstorder.h environment.h inputreaderfo.h
-	g++ -c firstorder.cpp
+# beta.o : beta.cpp beta.h substitution.h
+# 	g++ -c beta.cpp
 
-firstorder.h : matchrule.h dependencypair.h alphabet.h
-	touch firstorder.h
+# beta.h : term.h rule.h
+# 	touch beta.h
 
-formula.o : formula.cpp formula.h
-	g++ -c formula.cpp
+# bitblaster.o : bitblaster.cpp bitblaster.h polconstraintlist.h sat.h
+# 	g++ -c bitblaster.cpp
 
-horpo.o : horpo.cpp horpo.h horpojustifier.h outputmodule.h sat.h
-	g++ -c horpo.cpp
+# bitblaster.h : polynomial.h formula.h
+# 	touch bitblaster.h
 
-horpo.h : alphabet.h formula.h horpoconstraintlist.h orderingproblem.h
-	touch horpo.h
+# dependencypair.o : dependencypair.cpp dependencypair.h environment.h
+# 	g++ -c dependencypair.cpp
 
-horpojustifier.o : horpojustifier.cpp horpo.h horpojustifier.h outputmodule.h
-	g++ -c horpojustifier.cpp
+# dependencypair.h : term.h
+# 	touch dependencypair.h
 
-horpojustifier.h : alphabet.h environment.h orderingproblem.h
-	touch horpojustifier.h
+# dependencygraph.o : dependencygraph.cpp dependencygraph.h outputmodule.h substitution.h
+# 	g++ -c dependencygraph.cpp
 
-horpoconstraintlist.o : horpoconstraintlist.cpp horpo.h substitution.h
-	g++ -c horpoconstraintlist.cpp
+# dependencygraph.h : dependencypair.h typer.h matchrule.h
+# 	touch dependencygraph.h
 
-horpoconstraintlist.h : requirement.h formula.h
-	touch horpoconstraintlist.h
+# dpframework.o : dpframework.cpp dpframework.h beta.h environment.h horpo.h outputmodule.h polymodule.h subcritchecker.h substitution.h term.h
+# 	g++ -c dpframework.cpp
 
-inputreaderafsm.o : inputreaderafsm.cpp inputreaderafsm.h
-	g++ -c inputreaderafsm.cpp
+# dpframework.h : alphabet.h dependencypair.h dependencygraph.h firstorder.h orderingproblem.h rulesmanipulator.h
+# 	touch dpframework.h
 
-inputreaderafsm.h : textconverter.h matchrule.h outputmodule.h
-	touch inputreaderafsm.h
+# environment.o : environment.cpp environment.h term.h
+# 	g++ -c environment.cpp
 
-inputreaderatrs.o : inputreaderatrs.cpp inputreaderatrs.h afs.h outputmodule.h substitution.h typesubstitution.h
-	g++ -c inputreaderatrs.cpp
+# environment.h : type.h varset.h
+# 	touch environment.h
 
-inputreaderatrs.h : textconverter.h matchrule.h
-	touch inputreaderatrs.h
+# firstorder.o : firstorder.cpp firstorder.h environment.h inputreaderfo.h
+# 	g++ -c firstorder.cpp
 
-inputreaderafs.o : inputreaderafs.cpp inputreaderafs.h substitution.h
-	g++ -c inputreaderafs.cpp
+# firstorder.h : matchrule.h dependencypair.h alphabet.h
+# 	touch firstorder.h
 
-inputreaderafs.h : textconverter.h matchrule.h afs.h
-	touch inputreaderafs.h
+# formula.o : formula.cpp formula.h
+# 	g++ -c formula.cpp
 
-inputreaderfo.o : inputreaderfo.cpp inputreaderfo.h outputmodule.h rulesmanipulator.h substitution.h
-	g++ -c inputreaderfo.cpp
+# horpo.o : horpo.cpp horpo.h horpojustifier.h outputmodule.h sat.h
+# 	g++ -c horpo.cpp
 
-inputreaderfo.h : textconverter.h matchrule.h
-	touch inputreaderfo.h
+# horpo.h : alphabet.h formula.h horpoconstraintlist.h orderingproblem.h
+# 	touch horpo.h
 
-matchrule.o : matchrule.cpp matchrule.h environment.h substitution.h typesubstitution.h
-	g++ -c matchrule.cpp
+# horpojustifier.o : horpojustifier.cpp horpo.h horpojustifier.h outputmodule.h
+# 	g++ -c horpojustifier.cpp
 
-matchrule.h : rule.h
-	touch matchrule.h
+# horpojustifier.h : alphabet.h environment.h orderingproblem.h
+# 	touch horpojustifier.h
 
-nonterminator.o : nonterminator.cpp nonterminator.h typesubstitution.h substitution.h beta.h environment.h outputmodule.h
-	g++ -c nonterminator.cpp
+# horpoconstraintlist.o : horpoconstraintlist.cpp horpo.h substitution.h
+# 	g++ -c horpoconstraintlist.cpp
 
-nonterminator.h : matchrule.h beta.h alphabet.h
-	touch nonterminator.h
+# horpoconstraintlist.h : requirement.h formula.h
+# 	touch horpoconstraintlist.h
 
-orderingproblem.o : orderingproblem.cpp orderingproblem.h formula.h outputmodule.h rulesmanipulator.h substitution.h
-	g++ -c orderingproblem.cpp
+# inputreaderafsm.o : inputreaderafsm.cpp inputreaderafsm.h
+# 	g++ -c inputreaderafsm.cpp
 
-orderingproblem.h : alphabet.h dependencypair.h formula.h matchrule.h requirement.h
-	touch orderingproblem.h
+# inputreaderafsm.h : textconverter.h matchrule.h outputmodule.h
+# 	touch inputreaderafsm.h
 
-outputmodule.o : outputmodule.cpp outputmodule.h afs.h
-	g++ -c outputmodule.cpp
+# inputreaderatrs.o : inputreaderatrs.cpp inputreaderatrs.h afs.h outputmodule.h substitution.h typesubstitution.h
+# 	g++ -c inputreaderatrs.cpp
 
-outputmodule.h : alphabet.h dependencypair.h matchrule.h polynomial.h requirement.h
-	touch outputmodule.h
+# inputreaderatrs.h : textconverter.h matchrule.h
+# 	touch inputreaderatrs.h
 
-polconstraintlist.o : polconstraintlist.cpp polconstraintlist.h outputmodule.h polymodule.h
-	g++ -c polconstraintlist.cpp
+# inputreaderafs.o : inputreaderafs.cpp inputreaderafs.h substitution.h
+# 	g++ -c inputreaderafs.cpp
 
-polconstraintlist.h : formula.h polynomial.h
-	touch polconstraintlist.h
+# inputreaderafs.h : textconverter.h matchrule.h afs.h
+# 	touch inputreaderafs.h
 
-polymodule.o : polymodule.cpp polymodule.h outputmodule.h smt.h substitution.h
-	g++ -c polymodule.cpp
+# inputreaderfo.o : inputreaderfo.cpp inputreaderfo.h outputmodule.h rulesmanipulator.h substitution.h
+# 	g++ -c inputreaderfo.cpp
 
-polymodule.h : polynomial.h alphabet.h polconstraintlist.h orderingproblem.h
-	touch polymodule.h
+# inputreaderfo.h : textconverter.h matchrule.h
+# 	touch inputreaderfo.h
 
-polynomial.o : polynomial.cpp polynomial.h
-	g++ -c polynomial.cpp
+# matchrule.o : matchrule.cpp matchrule.h environment.h substitution.h typesubstitution.h
+# 	g++ -c matchrule.cpp
 
-polynomial.h : type.h
-	touch polynomial.h
+# matchrule.h : rule.h
+# 	touch matchrule.h
 
-requirement.h : environment.h formula.h term.h
-	touch requirement.h
+# nonterminator.o : nonterminator.cpp nonterminator.h typesubstitution.h substitution.h beta.h environment.h outputmodule.h
+# 	g++ -c nonterminator.cpp
 
-rule.o : rule.cpp rule.h
-	g++ -c rule.cpp
+# nonterminator.h : matchrule.h beta.h alphabet.h
+# 	touch nonterminator.h
 
-rule.h : term.h
-	touch rule.h
+# orderingproblem.o : orderingproblem.cpp orderingproblem.h formula.h outputmodule.h rulesmanipulator.h substitution.h
+# 	g++ -c orderingproblem.cpp
 
-ruleremover.o : ruleremover.cpp ruleremover.h requirement.h outputmodule.h polymodule.h horpo.h rulesmanipulator.h
-	g++ -c ruleremover.cpp
+# orderingproblem.h : alphabet.h dependencypair.h formula.h matchrule.h requirement.h
+# 	touch orderingproblem.h
 
-ruleremover.h : alphabet.h matchrule.h orderingproblem.h
-	touch ruleremover.h
+# outputmodule.o : outputmodule.cpp outputmodule.h afs.h
+# 	g++ -c outputmodule.cpp
 
-rulesmanipulator.o : rulesmanipulator.cpp rulesmanipulator.h beta.h sat.h substitution.h typer.h typesubstitution.h
-	g++ -c rulesmanipulator.cpp
+# outputmodule.h : alphabet.h dependencypair.h matchrule.h polynomial.h requirement.h
+# 	touch outputmodule.h
 
-rulesmanipulator.h : alphabet.h dependencypair.h formula.h matchrule.h
-	touch rulesmanipulator.h
+# polconstraintlist.o : polconstraintlist.cpp polconstraintlist.h outputmodule.h polymodule.h
+# 	g++ -c polconstraintlist.cpp
 
-sat.o : sat.cpp sat.h
-	g++ -c sat.cpp
+# polconstraintlist.h : formula.h polynomial.h
+# 	touch polconstraintlist.h
 
-sat.h : formula.h
-	touch sat.h
+# polymodule.o : polymodule.cpp polymodule.h outputmodule.h smt.h substitution.h
+# 	g++ -c polymodule.cpp
 
-smt.o : smt.cpp smt.h bitblaster.h
-	g++ -c smt.cpp
+# polymodule.h : polynomial.h alphabet.h polconstraintlist.h orderingproblem.h
+# 	touch polymodule.h
 
-smt.h : formula.h polynomial.h polconstraintlist.h
-	touch smt.h
+# polynomial.o : polynomial.cpp polynomial.h
+# 	g++ -c polynomial.cpp
 
-subcritchecker.o : subcritchecker.cpp subcritchecker.h environment.h outputmodule.h rulesmanipulator.h sat.h
-	g++ -c subcritchecker.cpp
+# polynomial.h : type.h
+# 	touch polynomial.h
 
-subcritchecker.h : dependencypair.h formula.h
-	touch subcritchecker.h
+# requirement.h : environment.h formula.h term.h
+# 	touch requirement.h
 
-substitution.o : substitution.cpp substitution.h environment.h
-	g++ -c substitution.cpp
+# rule.o : rule.cpp rule.h
+# 	g++ -c rule.cpp
 
-substitution.h : term.h
-	touch substitution.h
+# rule.h : term.h
+# 	touch rule.h
 
-textconverter.o : textconverter.cpp textconverter.h environment.h typesubstitution.h
-	g++ -c textconverter.cpp
+# ruleremover.o : ruleremover.cpp ruleremover.h requirement.h outputmodule.h polymodule.h horpo.h rulesmanipulator.h
+# 	g++ -c ruleremover.cpp
 
-textconverter.h : alphabet.h term.h type.h typer.h
-	touch textconverter.h
+# ruleremover.h : alphabet.h matchrule.h orderingproblem.h
+# 	touch ruleremover.h
 
-term.o : term.cpp term.h environment.h substitution.h
-	g++ -c term.cpp
+# rulesmanipulator.o : rulesmanipulator.cpp rulesmanipulator.h beta.h sat.h substitution.h typer.h typesubstitution.h
+# 	g++ -c rulesmanipulator.cpp
 
-term.h : type.h varset.h
-	touch term.h
+# rulesmanipulator.h : alphabet.h dependencypair.h formula.h matchrule.h
+# 	touch rulesmanipulator.h
 
-type.o : type.cpp type.h typesubstitution.h
-	g++ -c type.cpp
+# sat.o : sat.cpp sat.h
+# 	g++ -c sat.cpp
 
-type.h : varset.h
-	touch type.h
+# sat.h : formula.h
+# 	touch sat.h
 
-typer.o : typer.cpp typer.h typesubstitution.h
-	g++ -c typer.cpp
+# smt.o : smt.cpp smt.h bitblaster.h
+# 	g++ -c smt.cpp
 
-typer.h : term.h
-	touch typer.h
+# smt.h : formula.h polynomial.h polconstraintlist.h
+# 	touch smt.h
 
-typesubstitution.o : typesubstitution.cpp typesubstitution.h
-	g++ -c typesubstitution.cpp
+# subcritchecker.o : subcritchecker.cpp subcritchecker.h environment.h outputmodule.h rulesmanipulator.h sat.h
+# 	g++ -c subcritchecker.cpp
 
-typesubstitution.h : type.h
-	touch typesubstitution.h
+# subcritchecker.h : dependencypair.h formula.h
+# 	touch subcritchecker.h
 
-varset.o : varset.cpp varset.h term.h type.h
-	g++ -c varset.cpp
+# substitution.o : substitution.cpp substitution.h environment.h
+# 	g++ -c substitution.cpp
 
-wanda.o : wanda.cpp wanda.h beta.h dpframework.h inputreaderafsm.h inputreaderatrs.h inputreaderafs.h inputreaderfo.h nonterminator.h outputmodule.h xmlreader.h ruleremover.h
-	g++ -c wanda.cpp
+# substitution.h : term.h
+# 	touch substitution.h
 
-wanda.h : alphabet.h matchrule.h
-	touch wanda.h
+# textconverter.o : textconverter.cpp textconverter.h environment.h typesubstitution.h
+# 	g++ -c textconverter.cpp
 
-xmlreader.o : xmlreader.cpp xmlreader.h
-	g++ -c xmlreader.cpp
+# textconverter.h : alphabet.h term.h type.h typer.h
+# 	touch textconverter.h
 
-.PHONY : clean
-clean :
-	rm $(objects)
+# term.o : term.cpp term.h environment.h substitution.h
+# 	g++ -c term.cpp
 
+# term.h : type.h varset.h
+# 	touch term.h
+
+# type.o : type.cpp type.h typesubstitution.h
+# 	g++ -c type.cpp
+
+# type.h : varset.h
+# 	touch type.h
+
+# typer.o : typer.cpp typer.h typesubstitution.h
+# 	g++ -c typer.cpp
+
+# typer.h : term.h
+# 	touch typer.h
+
+# typesubstitution.o : typesubstitution.cpp typesubstitution.h
+# 	g++ -c typesubstitution.cpp
+
+# typesubstitution.h : type.h
+# 	touch typesubstitution.h
+
+# varset.o : varset.cpp varset.h term.h type.h
+# 	g++ -c varset.cpp
+
+# wanda.o : wanda.cpp wanda.h beta.h dpframework.h inputreaderafsm.h inputreaderatrs.h inputreaderafs.h inputreaderfo.h nonterminator.h outputmodule.h xmlreader.h ruleremover.h
+# 	g++ -c wanda.cpp
+
+# wanda.h : alphabet.h matchrule.h
+# 	touch wanda.h
+
+# xmlreader.o : xmlreader.cpp xmlreader.h
+# 	g++ -c xmlreader.cpp
+
+# .PHONY : clean
+# clean :
+# 	rm -f $(objects)

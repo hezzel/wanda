@@ -68,7 +68,7 @@ CONVERTER_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'wanda.cpp.o
 $(BIN_DIR)/$(CONVERTER_EXEC): $(CONVERTER_OBJS)
 	@echo "Building Converter Utility Executable..."
 	@mkdir -p $(dir $@)
-	$(CXX) $(CONVERTER_OBJS) -o $@ $(LDFLAGS)
+	@$(CXX) $(CONVERTER_OBJS) -o $@ $(LDFLAGS)
 
 # Build step for C++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
@@ -84,6 +84,7 @@ $(BUILD_DIR)/minisat/bin/minisat:
 	@echo "Cloning minisat from github..."
 	@rm -rf $(BUILD_DIR)/minisat
 	git clone $(SAT_SOLVER_REPO) $(BUILD_DIR)/minisat
+	@mkdir -p $(BUILD_DIR)/minisat/bin
 	@echo "Building minisat..."
 	cd $(BUILD_DIR)/minisat && cmake . && $(MAKE)
 	@echo "Installing minisat executable as satsolver in Wanda's resources folder."

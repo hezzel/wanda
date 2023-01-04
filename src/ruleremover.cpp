@@ -21,10 +21,13 @@
 #include "horpo.h"
 #include "outputmodule.h"
 
-RuleRemover :: RuleRemover(bool use_pol, bool use_hor, bool use_prod) {
+RuleRemover :: RuleRemover(bool use_pol, bool use_hor, bool use_prod,
+                           bool use_ar, bool formal) {
   use_poly = use_pol;
   use_horpo = use_hor;
   use_polyprod = use_prod;
+  use_arities = use_ar;
+  formal_output = formal;
 }
 
 bool RuleRemover :: remove_rules(Alphabet &F, Ruleset &R) {
@@ -59,7 +62,7 @@ bool RuleRemover :: remove_rules(Alphabet &F, Ruleset &R) {
 bool RuleRemover :: attempt_rule_removal(Alphabet &F, Ruleset &R) {
   // make an ordering problem to send into the horpo module
   vars.reset();
-  OrderingProblem *prob = new PlainOrderingProblem(R, F);
+  OrderingProblem *prob = new PlainOrderingProblem(R, F, use_arities);
 
   wout.print("This gives the following requirements (possibly using "
     "Theorems 2.25 and 2.26 in " + wout.cite("Kop12") + "):\n");
@@ -109,6 +112,11 @@ bool RuleRemover :: poly_handle(OrderingProblem *prob, Alphabet &F,
       R[ok[j]] = NULL;
     }
     wout.print_rules(Rok, F, arities);
+    if (formal_output) {
+      wout.formal_print("Removed: ");
+      wout.formal_print_rules(Rok, F);
+      wout.formal_print("\n");
+    }
     for (j = 0; j < Rok.size(); j++) delete Rok[j];
     wout.print("\n");
     Ruleset Rmod;

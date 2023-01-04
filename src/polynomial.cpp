@@ -812,7 +812,7 @@ string Product :: to_string(map<int,int> &fr, map<int,int> &br,
                             bool brackets) {
   string ret;
   for (int i = 0; i < parts.size(); i++) {
-    if (parts[i]->query_integer() && i != 0) ret += "*";
+    if (i != 0) ret += "*";
     ret += parts[i]->to_string(fr, br, true);
   }
   if (parts.size() <= 1) ret = "{" + ret + "}";
@@ -1049,15 +1049,16 @@ void PolynomialFunction :: calculate_type() {
 
 string PolynomialFunction :: to_string() {
   if (variables.size() == 0) return p->to_string();
-  string ret = "\\";
+  string ret = "\\[";
   for (int i = 0; i < variables.size(); i++) {
     char tmp[10];
     sprintf(tmp, "%c%d",
       variable_types[i]->query_data() ? 'x' : 'F',
       variables[i]);
+    if (i != 0) ret += ";";
     ret += string(tmp);
   }
-  return ret + "." + p->to_string();
+  return ret + "]." + p->to_string();
 }
 
 string PolynomialFunction :: to_string(map<int,int> &freerename,
@@ -1065,7 +1066,7 @@ string PolynomialFunction :: to_string(map<int,int> &freerename,
   if (variables.size() == 0)
     return p->to_string(freerename, boundrename);
   
-  string ret = "\\";
+  string ret = "\\[";
   int i;
 
   for (i = 0; i < variables.size(); i++) {
@@ -1074,10 +1075,11 @@ string PolynomialFunction :: to_string(map<int,int> &freerename,
     char tmp[10];
     sprintf(tmp, "%c%d",
       variable_types[i]->query_data() ? 'y' : 'G', k);
+    if (i != 0) ret += ";";
     ret += string(tmp);
   }
 
-  ret += "." + p->to_string(freerename, boundrename);
+  ret += "]." + p->to_string(freerename, boundrename);
 
   for (i = 0; i < variables.size(); i++) {
     boundrename.erase(variables[i]);

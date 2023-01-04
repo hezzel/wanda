@@ -661,10 +661,13 @@ vector<int> PolyModule :: get_solution() {
   }
 
   problem->justify_orientables();
+  bool formal_print = problem->strictly_oriented().size() > 0;
 
   // replace all unknowns in the interpretations and print
   wout.print("The following interpretation satisfies the requirements:\n");
   wout.start_table();
+  if (formal_print) wout.formal_print("Interpretation: [\n");
+  bool first = true;
   for (map<string,PolynomialFunction*>::iterator ti =
        interpretations.begin(); ti != interpretations.end(); ti++) {
     ti->second->replace_unknowns(substitution);
@@ -675,8 +678,14 @@ vector<int> PolyModule :: get_solution() {
     columns.push_back(wout.print_polynomial_function(ti->second,
                                       freerename, boundrename));
     wout.table_entry(columns);
+    if (formal_print) {
+      if (!first) wout.formal_print(";\n");
+      first = false;
+      wout.formal_print("  J(" + ti->first + ") = " + columns[2] + " ");
+    }
   }
   wout.end_table();
+  if (formal_print) wout.formal_print("\n]\n\n");
 
   // recalculate the requirements, and determine which are strictly
   // satisfied

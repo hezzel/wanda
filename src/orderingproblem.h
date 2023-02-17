@@ -176,7 +176,8 @@ class OrderingProblem {
  */
 class PlainOrderingProblem : public OrderingProblem {
   public:
-    PlainOrderingProblem(Ruleset &rules, Alphabet &F);
+    PlainOrderingProblem(Ruleset &rules, Alphabet &F,
+                         bool allow_arities);
 };
 
 /**

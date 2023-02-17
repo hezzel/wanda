@@ -57,6 +57,10 @@ class Wanda {
     bool simplify_meta;
       // try to simplify "pattern" applications Z x1 ... xn in an AFS
       // to meta-variable applications Z[x1,...,xn]
+    bool formal;
+      // limit interest to techniques that have been formalised, and
+      // print the output in such a way that formal checkers can read
+      // it
     string firstorder;
       // if runtime arguments provide a certain first-order prover,
       // then this is saved here
@@ -134,6 +138,10 @@ class Wanda {
       // tries to decide whether the current system is terminating,
       // and prints YES/NO/MAYBE, as well as an explanation if silent
       // is not set
+
+    void certify_termination_status();
+      // tries to determine whether the current system is terminating
+      // using only formally verified techniques
 
     void respond(string answer);
       // respond with YES, NO or MAYBE

@@ -45,6 +45,7 @@ class OutputModule {
     map<string,string> citelist;
     bool paragraph_open;
     bool box_open;
+    string formal_output;
 
     vector<Method> methods;
 
@@ -96,12 +97,16 @@ class OutputModule {
     /* general printing */
 
     void print(string txt, bool avoid_paragraphs = false);
-    void print_header(string txt);
+    void formal_print(string txt);
+      // is only printed to the 'formal output' field (regardless of
+      // method; formal prints cannot be backtracked)
     void verbose_print(string txt);
       // is only printed if verbose or debug is set to true
     void debug_print(string txt);
       // is only printed if debug is set to true
     void literal_print(string txt);
+      // prints the text without any modifications (in a <pre> field)
+    void print_header(string txt);
 
     void start_table();
     void table_entry(vector<string> &columns);
@@ -192,6 +197,8 @@ class OutputModule {
     void print_alphabet(Alphabet &Sigma, ArList &arities);
     void print_rules(vector<MatchRule*> &rules, Alphabet &Sigma,
                      ArList &arities);
+    void formal_print_rules(vector<MatchRule*> &rules,
+                            Alphabet &sigma);
     void print_DPs(DPSet &dps, Alphabet &Sigma, ArList &arities,
                    bool print_numbers = false);
     void print_system(Alphabet &Sigma, vector<MatchRule*> &rules);
@@ -199,6 +206,7 @@ class OutputModule {
 
     /* printing the output */
 
+    void print_formal_output(string filename = "");
     void print_output(string filename = "");
 };
 

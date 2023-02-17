@@ -861,6 +861,7 @@ bool RulesManipulator :: add_sub_symbols(SymbolList &list, PTerm l) {
     ret |= add_symbols(list, symbols, types);
     l = l->subterm("1");
   }
+  return ret;
 }
 
 bool RulesManipulator :: symbol_occurs(SymbolList &list, string f,

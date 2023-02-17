@@ -31,6 +31,8 @@ class RuleRemover {
     bool use_poly;
     bool use_polyprod;
     bool use_horpo;
+    bool use_arities;
+    bool formal_output;
 
     bool attempt_rule_removal(Alphabet &F, Ruleset &R);
       // main functionality: tries to remove one or more rules from
@@ -43,7 +45,8 @@ class RuleRemover {
       // temporary use of external horpo solver
 
   public:
-    RuleRemover(bool use_poly, bool use_horpo, bool use_polyprod);
+    RuleRemover(bool use_poly, bool use_horpo, bool use_polyprod,
+                bool use_arities = true, bool formal_output = false);
 
     bool remove_rules(Alphabet &F, Ruleset &R);
       // returns true if rules were succesfully removed

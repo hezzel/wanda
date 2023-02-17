@@ -87,6 +87,10 @@ void OutputModule :: print(string txt, bool avoid_paragraphs) {
     methods[methods.size()-1].output += txt;
 }
 
+void OutputModule :: formal_print(string txt) {
+  formal_output += txt;
+}
+
 void OutputModule :: print_header(string txt) {
   if (box_open) print(INDENT, true);
   print("<header>" + txt + "</header>", true);
@@ -318,6 +322,15 @@ void OutputModule :: end_reduction() {
 
 /* =============== FINISHING OFF =============== */
 
+void OutputModule :: print_formal_output(string filename) {
+  if (filename == "") cout << plain_layout(formal_output);
+  else {
+    ofstream ofile(filename.c_str());
+    ofile << plain_layout(formal_output);
+    ofile.close();
+  }
+}
+
 void OutputModule :: print_output(string filename) {
   if (methods.size() > 1) {
     cout << "ERROR: did not close method "
@@ -409,9 +422,10 @@ string OutputModule :: plain_layout(string txt) {
   txt = replace_tag(txt, "boundpolvar", "<green>y", "</green>");
   txt = replace_tag(txt, "boundpolfun", "<green>G", "</green>");
   txt = replace_tag(txt, "parameter", "<cyan>a", "</cyan>");
-  txt = replace_occurrences(txt, "<funcabstraction/>", utf_symbol("\\"));
+  txt = replace_occurrences(txt, "<funcabstraction/>", utf_symbol("Lam"));
   txt = replace_occurrences(txt, "<funcdot/>", ".");
   txt = replace_occurrences(txt, "<addition/>", "<red>+</red>");
+  txt = replace_occurrences(txt, "<multiplication/>", "<red>*</red>");
 
   // rules
   txt = replace_occurrences(txt, "<rulearrow/>", utf_symbol("=>"));
@@ -499,7 +513,7 @@ string OutputModule :: utf_symbol(string symbol) {
   if (symbol == "gterm") return "≻";
   if (symbol == "geqterm") return "≽";
   if (symbol == ">=") return "≥";
-  if (symbol == "\\") return "Λ";
+  if (symbol == "Lam") return "Λ";
   if (symbol == "[[") return "⟦";
   if (symbol == "]]") return "⟧";
   if (symbol == "_|_") return "⊥";
@@ -849,7 +863,7 @@ void OutputModule :: print_alphabet(Alphabet &Sigma, ArList &arities) {
 void OutputModule :: print_rules(vector<MatchRule*> &rules,
                                  Alphabet &Sigma, ArList &arities) {
 
-  wout.start_table();
+  start_table();
 
   for (int i = 0; i < rules.size(); i++) {
     map<int,string> metanaming, freenaming, boundnaming;
@@ -863,6 +877,26 @@ void OutputModule :: print_rules(vector<MatchRule*> &rules,
   }
   
   wout.end_table();
+}
+
+void OutputModule :: formal_print_rules(vector<MatchRule*> &rules,
+                                        Alphabet &Sigma) {
+  ArList arities;
+  map<int,string> metanaming, freenaming, boundnaming;
+
+  formal_output += "[\n";
+  for (int i = 0; i < rules.size(); i++) {
+    formal_output += "  ";
+    formal_output += print_term(rules[i]->query_left_side(), arities,
+                                Sigma, metanaming, freenaming,
+                                boundnaming);
+    formal_output += " " + rule_arrow() + " ";
+    formal_output += print_term(rules[i]->query_right_side(), arities,
+                                Sigma, metanaming, freenaming,
+                                boundnaming);
+    if (i + 1 < rules.size()) formal_output += " ;\n";
+    else formal_output += "\n]\n";
+  }
 }
 
 ArList OutputModule :: arities_for_system(Alphabet &Sigma,
@@ -893,6 +927,23 @@ void OutputModule :: print_system(Alphabet &Sigma,
   
   end_box();
 }
+
+/*
+void OutputModule :: formal_print_system(Alphabet &Sigma,
+                                         vector<MatchRule*> &rules) {
+  ArList arities;
+  vector<string> symbs = Sigma.get_all();
+  for (int i = 0; i < symbs.size(); i++) arities[symbs[i]] = 0;
+
+  formal = true;
+  formal_output += "Signature: [\n";
+  print_alphabet(Sigma, arities, true);
+  formal_output += "\nRules: [\n";
+  print_rules(rules, Sigma, arities, true);
+  formal_output += "\n";
+  formal = false;
+}
+*/
 
 /* =============== SPECIFIC METHODS =============== */
 
@@ -930,6 +981,9 @@ string OutputModule :: post_parse_poly(string txt) {
     txt.replace(k, 1, "<addition/>");
   }
 
+  while ((k = txt.find("*")) != string::npos) {
+    txt.replace(k, 1, "<multiplication/>");
+  }
   return txt;
 }
 
@@ -1005,11 +1059,11 @@ void OutputModule :: print_DPs(vector<DependencyPair*> &dps,
     table_entry(entry);
   }
   
-  wout.end_table();
+  end_table();
 }
 
 void OutputModule :: print_numeric_graph(vector< vector<bool> > &graph) {
-  wout.start_table();
+  start_table();
   for (int i = 0; i < graph.size(); i++) {
     vector<string> entry;
     entry.push_back("*");
@@ -1021,9 +1075,9 @@ void OutputModule :: print_numeric_graph(vector< vector<bool> > &graph) {
       edges += str(j);
     }
     entry.push_back(edges);
-    wout.table_entry(entry);
+    table_entry(entry);
   }
-  wout.end_table();
+  end_table();
 }
 
 OutputModule wout;

@@ -57,13 +57,13 @@ void Alphabet :: copy(Alphabet &target) {
 }
 
 string Alphabet :: to_string() {
-  string ret = "{ ";
+  string ret = "[ \n";
   for (map<string,PType>::iterator it = data.begin();
        it != data.end(); it++) {
     TypeNaming naming;
-    ret += it->first + " : " + it->second->to_string(naming) + " , ";
+    ret += "  " + it->first + " : " + it->second->to_string(naming) + " ;\n";
   }
-  return ret.substr(0,ret.length()-3) + " }";
+  return ret.substr(0,ret.length()-3) + "\n]\n";
 }
 
 void Alphabet :: remove(string elem) {

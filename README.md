@@ -20,6 +20,9 @@ Command-line arguments:
     By default WANDA prints YES/NO/MAYBE followed by an explanation
     (a proof, counter example or the reason why deciding was
     difficult).  You can suppress this by choosing silent mode.
+  * --formal, -l
+    This forces Wanda to limit interest to techniques that have been
+    formalised, and prints the output in a formal way.
   * --rewrite, -r
     Rather than proving termination, the user is prompted to type in
     a term, and this term is rewritten following the rules.

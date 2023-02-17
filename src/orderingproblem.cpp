@@ -193,8 +193,17 @@ void OrderingProblem :: print() {
 }
 
 
-PlainOrderingProblem :: PlainOrderingProblem(Ruleset &rules, Alphabet &F)
+PlainOrderingProblem :: PlainOrderingProblem(Ruleset &rules, Alphabet &F,
+                                             bool allow_arities)
   :OrderingProblem(rules, F) {
+
+  // if we are not allowed to calculate arities, set them all to 0
+  if (!allow_arities) {
+    for (map<string,int>::iterator it = arities.begin(); it != arities.end();
+         it++) {
+      it->second = 0;
+    }
+  }
   
   // nothing may be filtered, so just add constraints
   int base = vars.query_size();

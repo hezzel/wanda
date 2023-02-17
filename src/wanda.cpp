@@ -32,7 +32,7 @@
 
 void Wanda :: run(vector<string> args) {
   //if (args.size() >= 2) args.pop_back();
-    // TODO: competition parameter, remove afterwards
+    // competition parameter, remove afterwards
 
   parse_runtime_arguments(args);
 
@@ -73,6 +73,7 @@ void Wanda :: run(vector<string> args) {
     if (do_rewriting) rewrite_term();
     else if (query != "") check_query();
     else if (just_show) wout.print_output(outputfile);
+    else if (formal) certify_termination_status();
     else determine_termination();
 
     // clear alphabet and rules for this run
@@ -103,6 +104,7 @@ void Wanda :: parse_runtime_arguments(vector<string> &args) {
   string style = "";
   use_betafirst = false;
   simplify_meta = true;
+  formal = false;
 
   int i;
   for (i = 0; i < args.size(); i++) {
@@ -119,6 +121,7 @@ void Wanda :: parse_runtime_arguments(vector<string> &args) {
     else if (arg == "--show") just_show = true;
     else if (arg == "--betafirst") use_betafirst = true;
     else if (arg == "--dontsimplify") simplify_meta = false;
+    else if (arg == "--formal") formal = true;
     else if (arg.substr(0,9) == "--format=")
       formalism = arg.substr(9);
     else if (arg.substr(0,13) == "--firstorder=")
@@ -147,6 +150,7 @@ void Wanda :: parse_runtime_arguments(vector<string> &args) {
       else if (arg[j] == 'r') do_rewriting = true;
       else if (arg[j] == 'D') wout.set_debugmode(true);
       else if (arg[j] == 'w') just_show = true;
+      else if (arg[j] == 'l') formal = true;
       else if (arg[j] == 'f' || arg[j] == 'i' || arg[j] == 'd' ||
                arg[j] == 'q' || arg[j] == 'y' || arg[j] == 'o' ||
                arg[j] == 'n') {
@@ -176,7 +180,7 @@ void Wanda :: parse_runtime_arguments(vector<string> &args) {
     }
   }
 
-  // check whether the given is acceptable
+  // check whether the given formalism is acceptable
   if (formalism != "" && !known_formalism(formalism)) {
     error = "Could not parse runtime arguments: do not know "
             "formalism '" + formalism + "'.";
@@ -597,6 +601,30 @@ void Wanda :: determine_termination() {
   }
 }
 
+void Wanda :: certify_termination_status() {
+  // print signature
+  wout.formal_print("Signature: " + Sigma.to_string() + "\n");
+  
+  // print rules
+  wout.formal_print("Rules: ");
+  wout.formal_print_rules(rules, Sigma);
+  wout.formal_print("\n");
+
+  if (!allow_rulesremoval || !allow_polynomials) {
+    cout << "MAYBE" << endl <<
+      "(Disabled the only technique available for certification.)" <<
+      endl;
+    return;
+  }
+
+  RuleRemover remover(true, false, allow_polyprod, false, true);
+  remover.remove_rules(Sigma, rules);
+
+  if (rules.empty()) cout << "YES" << endl;
+  else cout << "MAYBE" << endl;
+
+  wout.print_formal_output(outputfile);
+}
 
 /** main function **/
 

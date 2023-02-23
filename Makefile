@@ -68,7 +68,7 @@ CONVERTER_OBJS := $(shell find $(BUILD_DIR) -name '*.cpp.o' ! -name 'wanda.cpp.o
 $(BIN_DIR)/$(CONVERTER_EXEC): $(CONVERTER_OBJS)
 	@echo 'Building Wanda Executable.\n'
 	@mkdir -p $(dir $@)
-	$(CXX) $(CONVERTER_OBJS) -o $@ $(LDFLAGS)
+	@$(CXX) $(CONVERTER_OBJS) -o $@ $(LDFLAGS)
 
 # Build step for C++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp

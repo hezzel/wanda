@@ -48,7 +48,10 @@ Command-line arguments:
     --disable=nt,rr or -d nt,rr (note that there is no space after
     the comma!).  The things you can disable are:
     - nt: non-termination proving
-    - rr: rules removal
+    - rr: direct use of reduction pairs and reduction pairs inside
+      rule removal
+    - rem: rule removal (ordering all rules at the same time is still
+      possible)
     - dp: the dependency pair framework
     - static: the static dependency pair framework
     - dynamic: the dynamic dependency pair framework

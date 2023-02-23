@@ -75,6 +75,7 @@ class Wanda {
       // is just stdout
     bool allow_nontermination;
                               // 2: only in the first-order part
+    bool allow_redpair;
     bool allow_rulesremoval;
     bool allow_dp;
     bool allow_static_dp;

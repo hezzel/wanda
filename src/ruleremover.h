@@ -34,14 +34,17 @@ class RuleRemover {
     bool use_arities;
     bool formal_output;
 
-    bool attempt_rule_removal(Alphabet &F, Ruleset &R);
+    bool attempt_rule_removal(Alphabet &F, Ruleset &R,
+                              bool all_at_once);
       // main functionality: tries to remove one or more rules from
-      // the given set, and returns true if this was succesful
+      // the given set, and returns true if this was succesful; if
+      // all_at_once is set, then all rules must be oriented in one go
     bool poly_handle(OrderingProblem *problem, Alphabet &F,
-                     Ruleset &rules, bool products);
+                     Ruleset &rules, bool products,
+                     bool indicate_removal);
       // tries polynomial interpretations, with or without products
     bool horpo_handle(OrderingProblem *problem, Alphabet &F,
-                      Ruleset &R);
+                      Ruleset &R, bool indicate_removal);
       // temporary use of external horpo solver
 
   public:
@@ -50,5 +53,8 @@ class RuleRemover {
 
     bool remove_rules(Alphabet &F, Ruleset &R);
       // returns true if rules were succesfully removed
+
+    bool remove_all(Alphabet &F, Ruleset &R);
+      // returns true if all rules were successfully removed in one go
 };
 

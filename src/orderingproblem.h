@@ -83,6 +83,8 @@ class OrderingProblem {
       // 2 if we require strong monotonicity for unfilterable symbols
     void require_atleastone(int start, int end);
       // adds a constraint start \/ ... \/ end (assuming start <= end)
+    void require_all(int start, int end);
+      // adds a constraint start /\ ... /\ end (assuming start <= end)
 
   public:
     map<string, int> arities;
@@ -172,12 +174,12 @@ class OrderingProblem {
  * A PlainOrdering is used to orient one or more rules, with a
  * monotonic ordering (so no arguments are filtered away).  All rules
  * must be ordered either strictly or non-strictly, and at least one
- * is ordered strictly.
+ * is ordered strictly -- or all of them are, if this is requested
  */
 class PlainOrderingProblem : public OrderingProblem {
   public:
     PlainOrderingProblem(Ruleset &rules, Alphabet &F,
-                         bool allow_arities);
+                         bool allow_arities, bool order_all);
 };
 
 /**

@@ -72,6 +72,12 @@ void OrderingProblem :: require_atleastone(int start, int end) {
   constraints.push_back(req);
 }
 
+void OrderingProblem :: require_all(int start, int end) {
+  And *req = new And();
+  for (int i = start; i <= end; i++) req->add_child(new Var(i));
+  constraints.push_back(req);
+}
+
 void OrderingProblem :: set_filterable(string f) {
   int ar = arities[f];
   filterable[f] = vars.query_size();
@@ -194,7 +200,8 @@ void OrderingProblem :: print() {
 
 
 PlainOrderingProblem :: PlainOrderingProblem(Ruleset &rules, Alphabet &F,
-                                             bool allow_arities)
+                                             bool allow_arities,
+                                             bool order_all)
   :OrderingProblem(rules, F) {
 
   // if we are not allowed to calculate arities, set them all to 0
@@ -215,7 +222,9 @@ PlainOrderingProblem :: PlainOrderingProblem(Ruleset &rules, Alphabet &F,
     vars.set_description(v, "StrictRule[" + wout.str(i+1) + "]");
     reqs.push_back(OrderRequirement::maybe_greater(left, right, v, i));
   }
-  require_atleastone(base, vars.query_size() - 1);
+
+  if (order_all) require_all(base, vars.query_size() -1);
+  else require_atleastone(base, vars.query_size() - 1);
 }
 
 

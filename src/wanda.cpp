@@ -189,7 +189,8 @@ void Wanda :: parse_runtime_arguments(vector<string> &args) {
 
   // deal with disable
   allow_nontermination = (disable.find("nt") == string::npos);
-  allow_rulesremoval   = (disable.find("rr") == string::npos);
+  allow_rulesremoval   = (disable.find("rem") == string::npos);
+  allow_redpair        = (disable.find("rr") == string::npos);
   allow_dp             = (disable.find("dp") == string::npos);
   allow_subcrit        = (disable.find("sc") == string::npos);
   allow_static_dp      = (disable.find("static") == string::npos);
@@ -203,6 +204,8 @@ void Wanda :: parse_runtime_arguments(vector<string> &args) {
   allow_graph          = (disable.find("graph") == string::npos);
   allow_uwrt           = (disable.find("uwrt") == string::npos);
   allow_fwrt           = (disable.find("fwrt") == string::npos);
+
+  if (!allow_redpair) allow_rulesremoval = false;
 
   // deal with style
   if (style == "plain") {
@@ -495,10 +498,11 @@ string Wanda :: prove_termination(Alphabet &F, vector<MatchRule*> &R,
   // start off by removing rules as much as possible, but do not
   // use product polynomials if we're still going to do
   // dependency pairs, because those cause timeouts
-  if (allow_rulesremoval) {
+  if (allow_redpair) {
     RuleRemover remover(allow_polynomials, allow_horpo,
                          allow_polyprod && !allow_dp);
-    remover.remove_rules(F, R);
+    if (allow_rulesremoval) remover.remove_rules(F, R);
+    else remover.remove_all(F, R);
     if (R.empty()) {
       wout.succeed_method("termination");
       return "YES";
@@ -541,9 +545,10 @@ string Wanda :: prove_termination(Alphabet &F, vector<MatchRule*> &R,
   // in rare cases, rule removal may catch systems which dependency
   // pairs do not; for these cases, try full rule removal, so
   // including product polynomials, afterwards
-  if (allow_rulesremoval && allow_dp) {
+  if (allow_redpair && allow_dp) {
     RuleRemover remover(allow_polynomials, allow_horpo, allow_polyprod);
-    remover.remove_rules(F, R);
+    if (allow_rulesremoval) remover.remove_rules(F, R);
+    else remover.remove_all(F, R);
     if (R.empty()) {
       wout.succeed_method("termination");
       return "YES";
@@ -610,7 +615,7 @@ void Wanda :: certify_termination_status() {
   wout.formal_print_rules(rules, Sigma);
   wout.formal_print("\n");
 
-  if (!allow_rulesremoval || !allow_polynomials) {
+  if (!allow_redpair || !allow_polynomials) {
     cout << "MAYBE" << endl <<
       "(Disabled the only technique available for certification.)" <<
       endl;
@@ -618,8 +623,9 @@ void Wanda :: certify_termination_status() {
   }
 
   RuleRemover remover(true, false, allow_polyprod, false, true);
-  remover.remove_rules(Sigma, rules);
-
+  if (allow_rulesremoval) remover.remove_rules(Sigma, rules);
+  else remover.remove_all(Sigma, rules);
+  
   if (rules.empty()) cout << "YES" << endl;
   else cout << "MAYBE" << endl;
 

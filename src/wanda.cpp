@@ -121,7 +121,7 @@ void Wanda :: parse_runtime_arguments(vector<string> &args) {
     else if (arg == "--show") just_show = true;
     else if (arg == "--betafirst") use_betafirst = true;
     else if (arg == "--dontsimplify") simplify_meta = false;
-    else if (arg == "--formal") formal = true;
+    else if (arg == "--formal") { formal = true; simplify_meta = false; }
     else if (arg.substr(0,9) == "--format=")
       formalism = arg.substr(9);
     else if (arg.substr(0,13) == "--firstorder=")

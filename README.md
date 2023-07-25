@@ -3,6 +3,12 @@ WANDA is a command-line termination tool.  Given a file describing a
 is terminating), NO (the system is non-terminating) or MAYBE
 (termination status could not be determined).
 
+The theory used in Wanda can be found at:
+  * <https://drops.dagstuhl.de/opus/frontdoor.php?source_opus=12358>
+    (A tool paper describing Wanda)
+  * <https://www.cs.ru.nl/~cynthiakop/phdthesis.pdf>
+    (Cynthia Kop's PhD thesis)
+
 Command-line arguments:
   * \<filename\>
     If no file name is given, the user is prompted to type in a

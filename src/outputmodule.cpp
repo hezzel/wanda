@@ -411,7 +411,7 @@ string OutputModule :: plain_layout(string txt) {
   txt = replace_tag(txt, "boundvariable", "<green>", "</green>");
   txt = replace_tag(txt, "functionchildren", "(", ")");
   txt = replace_occurrences(txt, "<nextfunctionchild/>", ", ");
-  txt = replace_tag(txt, "metachildren", "(", ")");
+  txt = replace_tag(txt, "metachildren", "[", "]");
   txt = replace_occurrences(txt, "<nextmetachild/>", ", ");
   txt = replace_occurrences(txt, "<nextapplicationchild/>", utf_symbol(" "));
   txt = replace_tag(txt, "bracket", "(", ")");

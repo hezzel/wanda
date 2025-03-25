@@ -488,7 +488,7 @@ void HorpoJustifier :: justify(int variable, int &justifyindex,
 
     if (description.substr(0,4) == "Lex[") {
       string f = description.substr(4,description.length()-5);
-      if (atom->query_variable()) f + " " + wout.in_symbol() + " Lex";
+      if (atom->query_variable()) status = f + " " + wout.in_symbol() + " Lex";
       else status = f + " " + wout.in_symbol() + " Mul";
       continue;
     }

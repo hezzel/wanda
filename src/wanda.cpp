@@ -19,6 +19,7 @@
 #include "dpframework.h"
 #include "inputreaderafsm.h"
 #include "inputreaderatrs.h"
+#include "inputreaderari.h"
 #include "inputreaderafs.h"
 #include "inputreaderfo.h"
 #include "nonterminator.h"
@@ -68,6 +69,7 @@ void Wanda :: run(vector<string> args) {
       aborted = false;
       continue;
     }
+    wout.print_system(Sigma, rules);
 
     // and deal with it
     if (do_rewriting) rewrite_term();
@@ -266,7 +268,7 @@ void Wanda :: parse_runtime_arguments(vector<string> &args) {
 
 bool Wanda :: known_formalism(string format) {
   return format == "afsm" || format == "atrs" || format == "afs" ||
-         format == "xml" || format == "trs" || format == "";
+         format == "xml" || format == "trs" || format == "ari" || format == "";
 }
 
 string Wanda :: get_extension(string filename) {
@@ -301,7 +303,7 @@ void Wanda :: read_system(string filename) {
     return;
   }
 
-  if (extension != "atrs" && extension != "afs" &&
+  if (extension != "atrs" && extension != "afs" && extension != "ari" &&
       extension != "xml" && extension != "trs") {
 
     error = "Unsupported style: " + extension + ".";
@@ -319,6 +321,11 @@ void Wanda :: read_system(string filename) {
   }
   if (extension == "afs") {
     InputReaderAFS reader;
+    k = reader.read_file(filename, Sigma, rules);
+    warning = reader.query_warning();
+  }
+  if (extension == "ari") {
+    InputReaderARI reader;
     k = reader.read_file(filename, Sigma, rules);
     warning = reader.query_warning();
   }

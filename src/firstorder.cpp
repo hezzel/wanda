@@ -505,9 +505,18 @@ string FirstOrderSplitter :: determine_nontermination(
     get_constant_data(rules[i]->query_right_side(), F);
   }
 
-  if (single_sorted_alphabet(F)) return "NO";
-  if (manip.left_linear(rules) &&
-      !manip.has_critical_pairs(rules)) return "NO";
+  // in some cases first-order non-termination immediately implies higher-order
+  // non-termination
+  if (single_sorted_alphabet(F) ||
+      (manip.left_linear(rules) && !manip.has_critical_pairs(rules))) {
+    while (!ifile.eof()) {
+      string input;
+      getline(ifile, input);
+      reason += " || " + input + "\n";
+    }
+    system("rm resources/result");
+    return "NO";
+  }
 
   // get counterexample and check its validity
   string counterexample;
